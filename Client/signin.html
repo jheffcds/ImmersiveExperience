@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In / Sign Up</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo-container">
+      <a href="index.html">
+        <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
+      </a>
+      <h1 class="logo-text" id="logoText">VR</h1>
+    </div>
+
+    <button class="hamburger" id="hamburger">&#9776;</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="signin.html">Sign In</a></li>
+    </ul>
+  </nav>
+
+  <main class="auth-container">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button id="signInTab" class="active">Sign In</button>
+        <button id="signUpTab">Create Account</button>
+      </div>
+
+      <!-- Sign In Form -->
+        <form id="signInForm" class="auth-form">
+        <label>Email</label>
+        <input type="email" required />
+        <label>Password</label>
+        <input type="password" required />
+        <label id="signInError" class="error-label hidden"></label> <!-- Error Message -->
+        <button type="submit" class="btn">Sign In</button>
+        </form>
+
+        <!-- Sign Up Form -->
+        <form id="signUpForm" class="auth-form hidden">
+        <label>Full Name</label>
+        <input type="text" required />
+        <label>Email</label>
+        <input type="email" required />
+        <label>Password</label>
+        <input type="password" required />
+        <label id="signUpError" class="error-label hidden"></label> <!-- Error Message -->
+        <button type="submit" class="btn">Create Account</button>
+        </form>
+
+
+      <div class="divider">or</div>
+
+      <div class="sso-buttons">
+        <button class="sso-btn google">Continue with Google</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 VR Portfolio. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>

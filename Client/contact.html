@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo-container">
+      <a href="index.html">
+        <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
+      </a>
+      <h1 class="logo-text" id="logoText">VR</h1>
+    </div>
+
+    <button class="hamburger" id="hamburger">&#9776;</button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="signin.html">Sign In</a></li>
+    </ul>
+  </nav>
+
+  <main class="contact-container">
+    <h1>Contact Us</h1>
+    <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <label for="name">Full Name</label>
+      <input type="text" name="name" id="name" required />
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required />
+
+      <label for="subject">Subject</label>
+      <input type="text" name="subject" id="subject" required />
+
+      <label for="message">Message</label>
+      <textarea name="message" id="message" rows="6" required></textarea>
+
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
+      <p>Contact: <a href="mailto:jheffersoncastrodossantos@gmail.com">jheffersoncastrodossantos@gmail.com</a></p>
+      <div class="social-links">
+        <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
+        <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a>
+        <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+<script src="js/main.js"></script>
+</body>
+</html>

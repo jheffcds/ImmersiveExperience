@@ -21,7 +21,7 @@ app.use('/api/scenes', sceneRoutes);
 app.use(express.static(path.join(__dirname, '../Client')));
 
 // Fallback to index.html for any other route (good for SPAs)
-app.get('*', (req, res) => {
+app.get('/(.*)/', (req, res) => {
   console.log('here server');
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });

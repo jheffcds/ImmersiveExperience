@@ -13,6 +13,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register
 router.post('/register', async (req, res) => {
+  console.log('here routes/auth/register');
   const { name, email, password } = req.body;
   console.log('📥 Register Request:', req.body);
   try {
@@ -31,6 +32,7 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log('here routes/auth/login');
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -59,6 +61,7 @@ router.post('/login', async (req, res) => {
 
 //populate the user's scenes
 router.get('/me', authenticate, async (req, res) => {
+  console.log('here routes/auth/me');
   try {
     const user = await User.findById(req.user.id)
       .populate('preferredScenes')
@@ -77,6 +80,7 @@ router.get('/me', authenticate, async (req, res) => {
 
 // POST /api/auth/google
 router.post('/google', async (req, res) => {
+  console.log('here routes/auth/google');
   const { credential } = req.body;
 
   try {

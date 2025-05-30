@@ -35,6 +35,7 @@ router.get('/:id', async (req, res) => {
 
 // POST new scene (admin only)
 router.post('/', adminAuth, async (req, res) => {
+    console.log('here routes/scenes');
   const { title, description, isAvailable, link } = req.body;
 
   if (!title || !link) {

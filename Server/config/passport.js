@@ -4,6 +4,7 @@ const Scene = require('../models/Scene');
 
 
 module.exports = (passport) => {
+  console.log('here config/passport');
   passport.use(
     new GoogleStrategy(
       {

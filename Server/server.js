@@ -3,14 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
-
-const protectedRoutes = require('./routes/protected');
-const authRoutes = require('./routes/auth');
-const sceneRoutes = require('./routes/scenes');
-
 const app = express();
 app.use(cors());
 app.use(express.json());
+const protectedRoutes = require('./routes/protected');
+const authRoutes = require('./routes/auth');
+//const sceneRoutes = require('./routes/scenes');
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -21,7 +19,7 @@ app.use('/api/protected', protectedRoutes);
 app.use(express.static(path.join(__dirname, '../Client')));
 
 // Fallback to index.html for any other route (good for SPAs)
-app.get('/(.*)/', (req, res) => {
+app.get('*', (req, res) => {
   console.log('here server');
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });

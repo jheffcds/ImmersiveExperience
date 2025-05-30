@@ -14,6 +14,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // Register
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
+  console.log('📥 Register Request:', req.body);
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });

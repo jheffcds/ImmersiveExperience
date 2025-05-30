@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Scene = require('../models/Scene');

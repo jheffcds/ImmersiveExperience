@@ -6,6 +6,8 @@
   <title>Verity - Immersive Experiences</title>
   <link rel="icon" href="assets/images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 </head>
 <body>
 
@@ -35,29 +37,42 @@
       </div>
 
       <!-- Sign In Form -->
-        <form id="signInForm" class="auth-form">
+      <form id="signInForm" class="auth-form">
         <label>Email</label>
-        <input type="email" required />
+        <input id="signInEmail" type="email" required />
         <label>Password</label>
-        <input type="password" required />
+        <input id="signInPassword" type="password" required />
         <label id="signInError" class="error-label hidden"></label> <!-- Error Message -->
         <button type="submit" class="btn">Sign In</button>
-        </form>
+      </form>
 
-        <!-- Sign Up Form -->
-        <form id="signUpForm" class="auth-form hidden">
+      <!-- Sign Up Form -->
+      <form id="signUpForm" class="auth-form hidden">
         <label>Full Name</label>
-        <input type="text" required />
+        <input id="signUpName" type="text" required />
         <label>Email</label>
-        <input type="email" required />
+        <input id="signUpEmail" type="email" required />
         <label>Password</label>
-        <input type="password" required />
+        <input id="signUpPassword" type="password" required />
         <label id="signUpError" class="error-label hidden"></label> <!-- Error Message -->
         <button type="submit" class="btn">Create Account</button>
-        </form>
-
-
+      </form>
       <div class="divider">or</div>
+      <div class="sso-buttons">
+        <div id="g_id_onload"
+            data-client_id="YOUR_GOOGLE_CLIENT_ID"
+            data-callback="handleGoogleCredentialResponse"
+            data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="signin_with"
+            data-shape="rectangular"
+            data-logo_alignment="left">
+        </div>
+      </div>
 
       <div class="sso-buttons">
         <button class="sso-btn google">Continue with Google</button>

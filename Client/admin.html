@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Immersive Experiences</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo-container">
+      <a href="index.html">
+        <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
+      </a>
+      <h1 class="logo-text">Admin</h1>
+    </div>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="#" id="logoutBtn">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-container">
+    <h2>Add New Scene</h2>
+    <form id="addSceneForm">
+      <label>Title</label>
+      <input type="text" id="sceneTitle" required />
+
+      <label>Description</label>
+      <textarea id="sceneDescription" required></textarea>
+
+      <label>Scene Link</label>
+      <input type="url" id="sceneLink" required />
+
+      <label>
+        <input type="checkbox" id="isAvailable" checked />
+        Is Available
+      </label>
+
+      <button type="submit" class="btn">Add Scene</button>
+      <p id="formMessage"></p>
+    </form>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,7 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const Scene = require('../models/Scene');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+const authenticate = require('../middleware/authenticateToken'); // make sure it's required
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register
 router.post('/register', async (req, res) => {
@@ -32,6 +38,59 @@ router.post('/login', async (req, res) => {
     res.status(200).json({ message: "Login successful", name: user.name });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+//populate the user's scenes
+router.get('/me', authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .populate('preferredScenes')
+      .populate('boughtScenes')
+      .select('-password');
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
+  } catch (err) {
+    console.error('Error in /me:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+// POST /api/auth/google
+router.post('/google', async (req, res) => {
+  const { credential } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    // Find or create user
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        profileImage: picture,
+        password: '', // Not needed for Google users
+      });
+      await user.save();
+    }
+
+    // Create JWT
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+    res.json({ token, user });
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ message: 'Google authentication failed' });
   }
 });
 

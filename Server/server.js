@@ -1,15 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-
+const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
+const sceneRoutes = require('./routes/scenes');
+const cors = require('cors');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/protected', protectedRoutes);
+app.use('/api/scenes', sceneRoutes);
+
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

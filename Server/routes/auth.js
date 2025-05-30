@@ -6,9 +6,10 @@ const Scene = require('../models/Scene');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
-const authenticate = require('../middleware/authenticateToken'); // make sure it's required
+const authenticate = require('../middleware/authenticateToken.js'); // make sure it's required
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 // Register
 router.post('/register', async (req, res) => {
@@ -36,11 +37,24 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: "Invalid credentials" });
 
-    res.status(200).json({ message: "Login successful", name: user.name });
+    // Generate JWT
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 //populate the user's scenes
 router.get('/me', authenticate, async (req, res) => {

@@ -1,12 +1,11 @@
 const express = require('express');
+const User = require('../models/User');
 const router = express.Router();
-const authenticateToken = require('../middleware/auth');
+const authenticateToken = require('../middleware/authenticateToken');
 
-router.get('/dashboard', authenticateToken, (req, res) => {
-  res.json({
-    message: 'Welcome to your dashboard',
-    user: req.user,
-  });
+router.get('/profile', authenticateToken, async (req, res) => {
+  const user = await User.findById(req.user.id).select('-password');
+  res.json(user);
 });
 
 module.exports = router;

@@ -1,4 +1,4 @@
-/*const express = require('express');
+const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
 
@@ -58,4 +58,3 @@ router.post('/', adminAuth, async (req, res) => {
 });
 
 module.exports = router;
-*/

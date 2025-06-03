@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
+const admin = require('../middleware/adminAuth'); // Placeholder for admin middleware
 const auth = require('../middleware/auth');
 
 

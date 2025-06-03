@@ -1,4 +1,4 @@
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+/*const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 const Scene = require('../models/Scene');
 
@@ -40,3 +40,4 @@ module.exports = (passport) => {
     done(null, user);
   });
 };
+*/

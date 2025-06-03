@@ -8,12 +8,12 @@ app.use(cors());
 app.use(express.json());
 const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
-//const sceneRoutes = require('./routes/scenes');
+const sceneRoutes = require('./routes/scenes');
 
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
-//app.use('/api/scenes', sceneRoutes);
+app.use('/api/scenes', sceneRoutes);
 
 // Serve static frontend files from the Client directory
 app.use(express.static(path.join(__dirname, '../Client')));

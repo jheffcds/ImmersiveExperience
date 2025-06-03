@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
+const auth = require('../middleware/auth');
+
+
 
 // Middleware placeholder for admin auth - to implement later
 const adminAuth = (req, res, next) => {
@@ -34,8 +37,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new scene (admin only)
-router.post('/', adminAuth, async (req, res) => {
-    console.log('here routes/scenes');
+router.post('/', auth, adminAuth, async (req, res) => {
   const { title, description, isAvailable, link } = req.body;
 
   if (!title || !link) {
@@ -56,5 +58,6 @@ router.post('/', adminAuth, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
 
 module.exports = router;

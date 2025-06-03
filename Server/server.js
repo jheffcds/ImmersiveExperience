@@ -25,7 +25,7 @@ try {
 
 
 // Fallback to index.html for any other route (good for SPAs)
-app.get('/*', (req, res) => {
+app.get('/*splat', (req, res) => {
   console.log('here server');
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });

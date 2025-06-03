@@ -28,39 +28,46 @@
   </nav>
 
   <main class="auth-container">
-    <div class="auth-box">
-      <div class="auth-tabs">
-        <button id="signInTab" class="active">Sign In</button>
-        <button id="signUpTab">Create Account</button>
-      </div>
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button id="signInTab" class="active">Sign In</button>
+      <button id="signUpTab">Create Account</button>
+    </div>
 
-      <!-- Sign In Form -->
-      <form id="signInForm" class="auth-form">
-        <label>Email</label>
-        <input id="signInEmail" type="email" required />
-        <label>Password</label>
-        <input id="signInPassword" type="password" required />
-        <label id="signInError" class="error-label hidden"></label> <!-- Error Message -->
-        <button type="submit" class="btn">Sign In</button>
-      </form>
+    <!-- Sign In Form -->
+    <form id="signInForm" class="auth-form">
+      <label for="signInEmail">Email</label>
+      <input id="signInEmail" type="email" required />
+      <label for="signInPassword">Password</label>
+      <input id="signInPassword" type="password" required />
+      <label id="signInError" class="error-label hidden"></label>
+      <button type="submit" class="btn">Sign In</button>
+    </form>
 
-      <!-- Sign Up Form -->
-      <form id="signUpForm" class="auth-form hidden">
-        <label>Full Name</label>
-        <input id="signUpName" type="text" required />
-        <label>Email</label>
-        <input id="signUpEmail" type="email" required />
-        <label>Password</label>
-        <input id="signUpPassword" type="password" required />
-        <label>Repeat Password</label>
-        <input id="signUpPasswordcopy" type="password" required />
-        <label id="signUpError" class="error-label hidden"></label> <!-- Error Message -->
-        <button type="submit" class="btn">Create Account</button>
-      </form>
-      <div class="divider">or</div>
+    <!-- Sign Up Form -->
+    <form id="signUpForm" class="auth-form hidden">
+      <label for="signUpName">Full Name</label>
+      <input id="signUpName" type="text" required />
+      <label for="signUpEmail">Email</label>
+      <input id="signUpEmail" type="email" required />
+      <label for="signUpPassword">Password</label>
+      <input id="signUpPassword" type="password" required />
+      <label for="signUpPasswordcopy">Repeat Password</label>
+      <input id="signUpPasswordcopy" type="password" required />
+      <label id="signUpError" class="error-label hidden"></label>
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+
+    <div class="divider">or</div>
+
       <!-- Google Sign-In Button -->
       <div id="googleSignInButton" class="google-signin-button"></div>
+        <!-- Optional loading fallback -->
+        <p>Loading Google Sign-In...</p>
+      </div>
+    </div> <!-- ✅ Added this closing div -->
   </main>
+
 
   <footer class="site-footer">
     <div class="footer-content">

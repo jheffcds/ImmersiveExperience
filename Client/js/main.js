@@ -74,4 +74,84 @@ const signInTab = document.getElementById('signInTab');
       signInTab.classList.remove('active');
     });
 
+    const signInEmail = document.getElementById('signInEmail');
+    const signInPassword = document.getElementById('signInPassword');
+    const signUpName = document.getElementById('signUpName');
+    const signUpEmail = document.getElementById('signUpEmail');
+    const signUpPassword = document.getElementById('signUpPassword');
+    const signInError = document.getElementById('signInError');
+    const signUpError = document.getElementById('signUpError');
+
+    signInForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      signInError.classList.add('hidden');
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: signInEmail.value,
+            password: signInPassword.value,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          signInError.textContent = data.message || 'Login failed';
+          signInError.classList.remove('hidden');
+          return;
+        }
+        // Login success - redirect or show message
+        alert(`Welcome back, ${data.name}!`);
+        // For example, redirect to dashboard
+        window.location.href = '/dashboard.html';
+      } catch (err) {
+        signInError.textContent = 'Network error. Please try again.';
+        signInError.classList.remove('hidden');
+      }
+    });
+
+    signUpForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  signUpError.classList.add('hidden');
+
+  // Check if passwords match
+  if (signUpPassword.value !== signUpPasswordcopy.value) {
+    signUpError.textContent = 'Passwords do not match';
+    signUpError.classList.remove('hidden');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: signUpName.value,
+        email: signUpEmail.value,
+        password: signUpPassword.value,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      signUpError.textContent = data.message || 'Signup failed';
+      signUpError.classList.remove('hidden');
+      return;
+    }
+
+    alert('Account created successfully! Please sign in.');
+    signInTab.click();
+  } catch (err) {
+    signUpError.textContent = 'Network error. Please try again.';
+    signUpError.classList.remove('hidden');
+  }
+});
+
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  localStorage.removeItem('token');
+  window.location.href = '/signin.html';
+});
+
+
 });

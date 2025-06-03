@@ -1,20 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
-const admin = require('../middleware/adminAuth'); // Placeholder for admin middleware
+const adminAuth = require('../middleware/adminAuth'); // ✅ now using the real one
 const auth = require('../middleware/auth');
-
-
-
-// Middleware placeholder for admin auth - to implement later
-const adminAuth = (req, res, next) => {
-  // You can replace this with real admin verification logic
-  if (req.user && req.user.role === 'admin') {
-    next();
-  } else {
-    res.status(403).json({ message: 'Admin access required' });
-  }
-};
 
 // GET all scenes
 router.get('/', async (req, res) => {
@@ -59,6 +47,5 @@ router.post('/', auth, adminAuth, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
-
 
 module.exports = router;

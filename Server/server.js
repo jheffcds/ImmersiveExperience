@@ -30,6 +30,9 @@ app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });
 
+app.get('/api/config/google', (req, res) => {
+  res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
+});
 
 // MongoDB connection and server start
 mongoose.connect(process.env.MONGO_URI, {

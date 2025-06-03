@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
       hero.classList.remove('blurred');
     });
   }
-
   // Unmute Button Logic
   const unmuteBtn = document.getElementById('unmuteBtn');
   const introVideo = document.getElementById('introVideo');
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
   // Redirect on View buttons
   const viewButtons = document.querySelectorAll('.view-scene');
   viewButtons.forEach(button => {
@@ -41,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'scenes.html';
     });
   });
-
   // VR to Verity Logo Animation
   const logo = document.getElementById('logoText');
   if (logo) {
@@ -79,7 +76,7 @@ const signInTab = document.getElementById('signInTab');
     const signUpName = document.getElementById('signUpName');
     const signUpEmail = document.getElementById('signUpEmail');
     const signUpPassword = document.getElementById('signUpPassword');
-    const signInError = document.getElementById('signInError');
+    const signUpPasswordcopy = document.getElementById('signUpPasswordcopy');
     const signUpError = document.getElementById('signUpError');
 
     signInForm.addEventListener('submit', async (e) => {
@@ -146,6 +143,50 @@ const signInTab = document.getElementById('signInTab');
     signUpError.classList.remove('hidden');
   }
 });
+async function initGoogleSSO() {
+  try {
+    const res = await fetch('/api/config/google');
+    const { clientId } = await res.json();
 
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    script.onload = () => {
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleCredentialResponse,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById('googleSignInButton'),
+        { theme: 'outline', size: 'large' }
+      );
+    };
+  } catch (err) {
+    console.error('Failed to load Google SSO:', err);
+  }
+}
+
+window.handleCredentialResponse = async function (response) {
+  try {
+    const res = await fetch('/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Google login failed');
+    alert(`Welcome, ${data.name}`);
+    window.location.href = '/dashboard.html';
+  } catch (err) {
+    alert('Google login error: ' + err.message);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  initGoogleSSO();
+});
 
 });

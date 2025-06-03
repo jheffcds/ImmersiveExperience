@@ -148,10 +148,4 @@ const signInTab = document.getElementById('signInTab');
 });
 
 
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  localStorage.removeItem('token');
-  window.location.href = '/signin.html';
-});
-
-
 });

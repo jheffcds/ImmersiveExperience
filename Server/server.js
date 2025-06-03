@@ -16,13 +16,20 @@ app.use('/api/protected', protectedRoutes);
 app.use('/api/scenes', sceneRoutes);
 
 // Serve static frontend files from the Client directory
-app.use(express.static(path.join(__dirname, '../Client')));
+try {
+  app.use(express.static(path.join(__dirname, '../Client')));
+  console.log('✔ Static client files registered');
+} catch (err) {
+  console.error('Failed to register static client files:', err.message);
+}
+
 
 // Fallback to index.html for any other route (good for SPAs)
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   console.log('here server');
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });
+
 
 // MongoDB connection and server start
 mongoose.connect(process.env.MONGO_URI, {

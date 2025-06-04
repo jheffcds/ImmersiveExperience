@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   profilePicture: { type: String, default: 'uploads/profile/default.png' },  // 👈 new field
+  address: { type: String, default: '' }, 
   role: { type: String, default: 'user' }
 });
 

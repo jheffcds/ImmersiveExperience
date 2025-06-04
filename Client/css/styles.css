@@ -819,8 +819,8 @@ a {
     }
 
     .sidebar img {
-      width: 100px;
-      height: 100px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 1rem;
@@ -858,7 +858,7 @@ a {
 
     .scene-item {
       width: 180px;
-      background-color: #c95353;
+      background-color: (255, 208, 9, 0.66);
       padding: 1rem;
       border: 1px solid #ddd;
       border-radius: 8px;

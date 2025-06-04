@@ -65,7 +65,7 @@ router.post('/google', async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    const { email, name } = payload;
+    const { email, name, picture } = payload;
 
     // Check if user exists
     let user = await User.findOne({ email });
@@ -76,6 +76,7 @@ router.post('/google', async (req, res) => {
         name,
         email,
         password: Math.random().toString(36).slice(-8), // auto-gen password
+        profilePicture: payload.picture
       });
       await user.save();
     }
@@ -87,19 +88,25 @@ router.post('/google', async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    res.json({ token, name: user.name });
+    res.json({ token, name: user.name, picture: user.profilePicture });
   } catch (err) {
     console.error('Google Sign-In error:', err);
     res.status(401).json({ message: 'Invalid Google token' });
   }
 });
-
 // Get current user info
 router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
     if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
+
+    res.json({
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      address: user.address,
+      role: user.role
+    });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

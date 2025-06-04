@@ -3,7 +3,10 @@ const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
+const { OAuth2Client } = require('google-auth-library');
 
+// Google OAuth2 Client
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -37,9 +40,9 @@ router.post('/login', async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     const token = jwt.sign(
-        { userId: user._id, name: user.name, role: user.role }, 
-        process.env.JWT_SECRET,
-        { expiresIn: '1d' }
+      { userId: user._id, name: user.name, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
     );
 
     res.json({ token, name: user.name });
@@ -49,7 +52,49 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Protected route to get current user info
+// Google Sign-In
+router.post('/google', async (req, res) => {
+  try {
+    const { credential } = req.body;
+    if (!credential) return res.status(400).json({ message: 'Missing Google credential' });
+
+    // Verify the Google ID token
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name } = payload;
+
+    // Check if user exists
+    let user = await User.findOne({ email });
+
+    // If not, create new user with random password
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        password: Math.random().toString(36).slice(-8), // auto-gen password
+      });
+      await user.save();
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user._id, name: user.name, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.json({ token, name: user.name });
+  } catch (err) {
+    console.error('Google Sign-In error:', err);
+    res.status(401).json({ message: 'Invalid Google token' });
+  }
+});
+
+// Get current user info
 router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
@@ -59,6 +104,5 @@ router.get('/me', auth, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 
 module.exports = router;

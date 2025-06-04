@@ -9,12 +9,13 @@ app.use(express.json());
 const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
+const configRoutes = require('./routes/config');
 
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
 app.use('/api/scenes', sceneRoutes);
-
+app.use('/api/config', configRoutes);
 // Serve static frontend files from the Client directory
 try {
   app.use(express.static(path.join(__dirname, '../Client')));
@@ -30,9 +31,6 @@ app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });
 
-app.get('/api/config/google', (req, res) => {
-  res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
-});
 
 // MongoDB connection and server start
 mongoose.connect(process.env.MONGO_URI, {

@@ -1,3 +1,4 @@
+import { loadProfileSettingsModal } from './profile-settings.js';
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
 
@@ -33,4 +34,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     console.error('Error loading user info:', err);
   }
+  await loadProfileSettingsModal(); // Load the modal dynamically
 });

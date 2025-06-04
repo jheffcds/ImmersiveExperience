@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
 
-  if (!token) {
-    window.location.href = '/login.html';
-    return;
-  }
+if (!token) {
+  window.location.href = '/signin.html';
+  return;
+}
+
 
   try {
     const res = await fetch('/api/auth/me', {

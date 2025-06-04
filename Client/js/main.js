@@ -54,6 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('hamburger').addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('active');
   });
-
-  
+  // Logout Button Logic
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.clear(); // Remove all stored user data
+      window.location.href = 'signin.html'; // Redirect to login
+    });
+  }
 });

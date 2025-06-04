@@ -30,6 +30,11 @@ try {
 } catch (err) {
   console.error('access to upload folder denied', err.message);
 }
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Client', 'dashboard.html'));
+});app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Client', 'dashboard.html'));
+});
 
 // Fallback to index.html for any other route (good for SPAs)
 app.get('/*splat', (req, res) => {

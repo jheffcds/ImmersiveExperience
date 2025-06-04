@@ -1,84 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Settings</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    .settings-container {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+// settings.js
+
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+
+  const nameInput = document.getElementById('settingsName');
+  const emailInput = document.getElementById('settingsEmail');
+  const addressInput = document.getElementById('settingsAddress');
+
+  // Load user data
+  fetch('/api/auth/me', {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then(res => res.json())
+    .then(data => {
+      nameInput.value = data.name || '';
+      emailInput.value = data.email || '';
+      addressInput.value = data.address || '';
+    })
+    .catch(err => console.error('Failed to load user info', err));
+
+  // Form submit
+  document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    try {
+      const res = await fetch('/api/user/update', {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error('Update failed');
+
+      const updated = await res.json();
+      localStorage.setItem('userName', updated.name);
+      localStorage.setItem('userPicture', updated.profilePicture);
+
+      alert('Profile updated!');
+      window.location.href = '/dashboard.html';
+    } catch (err) {
+      alert('Update failed: ' + err.message);
     }
+  });
 
-    .settings-container h2 {
-      margin-bottom: 1rem;
+  // Change password
+  document.getElementById('changePasswordBtn').addEventListener('click', async () => {
+    try {
+      const res = await fetch('/api/user/request-password-reset', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error('Failed to send password reset email');
+      alert('An email has been sent to change your password.');
+    } catch (err) {
+      alert('Error: ' + err.message);
     }
+  });
 
-    .settings-container label {
-      display: block;
-      margin-top: 1rem;
+  // Delete account
+  document.getElementById('deleteAccountBtn').addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to delete your account?')) return;
+
+    try {
+      const res = await fetch('/api/user/delete', {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error('Deletion failed');
+      localStorage.clear();
+      alert('Account deleted');
+      window.location.href = '/signin.html';
+    } catch (err) {
+      alert('Error: ' + err.message);
     }
-
-    .settings-container input {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-    }
-
-    .actions {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .actions button {
-      padding: 0.75rem;
-    }
-
-    .delete-button {
-      background-color: #e53935;
-      color: white;
-    }
-  </style>
-</head>
-<body>
-  <div class="settings-container">
-    <h2>Profile Settings</h2>
-    <form id="settingsForm">
-      <label>
-        Name
-        <input type="text" id="settingsName" name="name" />
-      </label>
-
-      <label>
-        Email
-        <input type="email" id="settingsEmail" name="email" />
-      </label>
-
-      <label>
-        Address
-        <input type="text" id="settingsAddress" name="address" />
-      </label>
-
-      <label>
-        Profile Picture
-        <input type="file" name="profilePicture" />
-      </label>
-
-      <div class="actions">
-        <button type="submit">Update Profile</button>
-        <button type="button" id="changePasswordBtn">Change Password</button>
-        <button type="button" id="deleteAccountBtn" class="delete-button">Delete Profile</button>
-      </div>
-    </form>
-  </div>
-
-  <script src="js/settings.js"></script>
-</body>
-</html>
+  });
+  document.getElementById('profilePictureInput').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  if (file) {
+    const preview = document.getElementById('profilePreview');
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+  }
+});
+});

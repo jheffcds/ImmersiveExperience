@@ -10,7 +10,7 @@
       max-width: 600px;
       margin: 2rem auto;
       padding: 2rem;
-      background: #fff;
+      background: #2a2a2a;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
@@ -45,9 +45,51 @@
       background-color: #e53935;
       color: white;
     }
+    .update-button {
+      background-color: #0a8408;
+      color: white;
+    }
+    .back-button {
+      position: relative;
+      top: 5px;
+      left: px;
+      text-decoration: none;
+      background-color: #444;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    .back-button:hover {
+      background-color: #f2d30d;
+      color: black;
+    }
+    .upload-label {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 10px 16px;
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+}
+
+.upload-label:hover {
+  background-color: #0b5ed7;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
   </style>
 </head>
 <body>
+    <!-- Back to Dashboard Button -->
+  <a href="dashboard.html" class="back-button">← Back to Dashboard</a>
   <div class="settings-container">
     <h2>Profile Settings</h2>
     <form id="settingsForm">
@@ -66,13 +108,13 @@
         <input type="text" id="settingsAddress" name="address" />
       </label>
 
-      <label>
-        Profile Picture
-        <input type="file" name="profilePicture" />
+      <label for="profilePictureInput" class="upload-label">
+      Upload Profile Picture
       </label>
-
+      <img id="profilePreview" src="" alt="Preview" style="margin-top: 1rem; max-width: 100px; display: none;" />
+      <input type="file" id="profilePictureInput" name="profilePicture" class="hidden-file-input" />
       <div class="actions">
-        <button type="submit">Update Profile</button>
+        <button type="submit" id="updateBtn" class="update-button">Update Profile</button>
         <button type="button" id="changePasswordBtn">Change Password</button>
         <button type="button" id="deleteAccountBtn" class="delete-button">Delete Profile</button>
       </div>

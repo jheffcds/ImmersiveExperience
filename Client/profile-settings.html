@@ -1,24 +1,68 @@
-<!-- profile-settings.html -->
-<div id="settingsModal" class="modal hidden">
-  <div class="modal-content">
-    <span id="closeSettingsModal" class="close-button">&times;</span>
-    <h2>Account Settings</h2>
+<style>
+  #settingsModal.hidden {
+    display: none;
+  }
 
-    <form id="settingsForm" enctype="multipart/form-data">
-      <label for="profileImage">Profile Image</label>
-      <input type="file" id="profileImage" name="profileImage" accept="image/*" />
+  #settingsModal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
 
-      <label for="settingsName">Full Name</label>
-      <input type="text" id="settingsName" name="name" required />
+  .settings-modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+  }
 
-      <label for="settingsEmail">Email Address</label>
-      <input type="email" id="settingsEmail" name="email" required />
+  .settings-modal-content h2 {
+    margin-top: 0;
+  }
 
-      <label for="settingsAddress">Address</label>
-      <input type="text" id="settingsAddress" name="address" />
+  .settings-modal-content label {
+    display: block;
+    margin-top: 1rem;
+  }
 
-      <button type="submit" class="btn">Save Changes</button>
-      <button type="button" id="deleteAccountBtn" class="btn danger">Delete Account</button>
+  .settings-modal-content input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .settings-modal-content button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+</style>
+
+<div id="settingsModal" class="hidden">
+  <div class="settings-modal-content">
+    <button id="closeSettingsModal" style="float:right;">&times;</button>
+    <h2>Settings</h2>
+    <form id="settingsForm">
+      <label>Name <input id="settingsName" name="name" type="text" /></label>
+      <label>Email <input id="settingsEmail" name="email" type="email" /></label>
+      <label>Address <input id="settingsAddress" name="address" type="text" /></label>
+      <label>Profile Image <input name="profilePicture" type="file" /></label>
+      <div class="modal-actions">
+        <button type="submit">Update</button>
+        <button type="button" id="changePasswordBtn">Change Password</button>
+        <button type="button" id="deleteAccountBtn" style="color: red;">Delete Account</button>
+      </div>
     </form>
   </div>
 </div>

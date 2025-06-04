@@ -1,101 +1,84 @@
-// profile-settings.js
-function loadProfileSettingsModal() {
-  fetch('/partials/profile-settings.html')
-    .then(res => res.text())
-    .then(async (modalHTML) => {
-      document.body.insertAdjacentHTML('beforeend', modalHTML);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .settings-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
 
-      const token = localStorage.getItem('token');
+    .settings-container h2 {
+      margin-bottom: 1rem;
+    }
 
-      try {
-        const res = await fetch('/api/auth/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
+    .settings-container label {
+      display: block;
+      margin-top: 1rem;
+    }
 
-        document.getElementById('settingsName').value = data.name || '';
-        document.getElementById('settingsEmail').value = data.email || '';
-        document.getElementById('settingsAddress').value = data.address || '';
-      } catch (err) {
-        console.error('Failed to load user info into modal', err);
-      }
+    .settings-container input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+    }
 
-      // Open modal
-      document.getElementById('settingsModal').classList.remove('hidden');
+    .actions {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-      // Close modal
-      document.getElementById('closeSettingsModal').addEventListener('click', () => {
-        document.getElementById('settingsModal').classList.add('hidden');
-      });
+    .actions button {
+      padding: 0.75rem;
+    }
 
-      // Submit update
-      document.getElementById('settingsForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
+    .delete-button {
+      background-color: #e53935;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <h2>Profile Settings</h2>
+    <form id="settingsForm">
+      <label>
+        Name
+        <input type="text" id="settingsName" name="name" />
+      </label>
 
-        try {
-          const res = await fetch('/api/user/update', {
-            method: 'PUT',
-            headers: { Authorization: `Bearer ${token}` },
-            body: formData,
-          });
+      <label>
+        Email
+        <input type="email" id="settingsEmail" name="email" />
+      </label>
 
-          if (!res.ok) throw new Error('Update failed');
+      <label>
+        Address
+        <input type="text" id="settingsAddress" name="address" />
+      </label>
 
-          const updated = await res.json();
+      <label>
+        Profile Picture
+        <input type="file" name="profilePicture" />
+      </label>
 
-          // Update UI
-          document.getElementById('userName').textContent = updated.name;
-          document.getElementById('userProfileImage').src = updated.profilePicture;
+      <div class="actions">
+        <button type="submit">Update Profile</button>
+        <button type="button" id="changePasswordBtn">Change Password</button>
+        <button type="button" id="deleteAccountBtn" class="delete-button">Delete Profile</button>
+      </div>
+    </form>
+  </div>
 
-          localStorage.setItem('userName', updated.name);
-          localStorage.setItem('userPicture', updated.profilePicture);
-
-          alert('Profile updated!');
-          document.getElementById('settingsModal').classList.add('hidden');
-        } catch (err) {
-          alert('Update failed: ' + err.message);
-        }
-      });
-
-      // Delete account
-      document.getElementById('deleteAccountBtn').addEventListener('click', async () => {
-        if (!confirm('Are you sure you want to delete your account?')) return;
-
-        try {
-          const res = await fetch('/api/user/delete', {
-            method: 'DELETE',
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (!res.ok) throw new Error('Deletion failed');
-          localStorage.clear();
-          alert('Account deleted');
-          window.location.href = '/signin.html';
-        } catch (err) {
-          alert('Error: ' + err.message);
-        }
-      });
-
-      // Change password handler
-      const changePassBtn = document.getElementById('changePasswordBtn');
-      if (changePassBtn) {
-        changePassBtn.addEventListener('click', async () => {
-          try {
-            const res = await fetch('/api/user/request-password-reset', {
-              method: 'POST',
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            });
-
-            if (!res.ok) throw new Error('Failed to send password reset email');
-            alert('Password reset email sent.');
-          } catch (err) {
-            alert('Failed: ' + err.message);
-          }
-        });
-      }
-    });
-}
+  <script src="js/settings.js"></script>
+</body>
+</html>

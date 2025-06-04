@@ -1,70 +1,33 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('token');
 
   if (!token) {
-    window.location.href = '/signin.html'; // Redirect if not logged in
+    window.location.href = '/login.html';
     return;
   }
 
-  // Optional: decode JWT on frontend
-  function parseJwt(token) {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(atob(base64));
-    } catch (err) {
-      return null;
-    }
-  }
-
-  const userInfo = parseJwt(token);
-  if (!userInfo) {
-    localStorage.removeItem('token');
-    window.location.href = '/signin.html';
-    return;
-  }
-
-  // Fetch user data from server (requires JWT middleware in backend)
-  fetch('/api/auth/me', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-    .then(res => {
-      if (!res.ok) throw new Error('Invalid token');
-      return res.json();
-    })
-    .then(user => {
-      document.getElementById('userName').textContent = user.name;
-      document.getElementById('userProfileImage').src = user.profileImage || 'uploads/profile/default.png';
-
-      renderScenes(user.preferredScenes, 'preferredScenes');
-      renderScenes(user.boughtScenes, 'purchasedScenes');
-    })
-    .catch(err => {
-      console.error('Auth error:', err);
-      localStorage.removeItem('token');
-      window.location.href = '/signin.html';
+  try {
+    const res = await fetch('/api/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-});
 
-function renderScenes(scenes, containerId) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = '';
+    if (!res.ok) throw new Error('Failed to fetch user info');
 
-  if (!scenes || scenes.length === 0) {
-    container.innerHTML = '<p>No scenes yet.</p>';
-    return;
+    const { name, profilePicture } = await res.json();
+
+    // Optionally cache in localStorage
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userPicture', profilePicture);
+
+    // Update the DOM
+    document.getElementById('userName').textContent = name || 'John Doe';
+    document.getElementById('userProfileImage').src = profilePicture || 'uploads/profile/default.png';
+
+  } catch (err) {
+    console.error('Error loading user info:', err);
+    document.getElementById('userName').textContent = 'John Doe';
+    document.getElementById('userProfileImage').src = 'uploads/profile/default.png';
   }
-
-  scenes.forEach(scene => {
-    const item = document.createElement('div');
-    item.classList.add('scene-item');
-    item.innerHTML = `
-      <img src="${scene.link}" alt="${scene.title}" />
-      <p>${scene.title}</p>
-    `;
-    container.appendChild(item);
-  });
-
-}
+});

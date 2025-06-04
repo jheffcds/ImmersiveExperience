@@ -23,7 +23,13 @@ try {
 } catch (err) {
   console.error('Failed to register static client files:', err.message);
 }
-
+// Serve uploads folder statically
+try {
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+  console.log('✔ access to uploads folder granted');
+} catch (err) {
+  console.error('access to upload folder denied', err.message);
+}
 
 // Fallback to index.html for any other route (good for SPAs)
 app.get('/*splat', (req, res) => {

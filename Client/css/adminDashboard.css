@@ -1,0 +1,116 @@
+/* Base container for admin dashboard content */
+#adminContent {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Headings */
+#adminContent h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* Form styling */
+#addSceneForm {
+  display: grid;
+  gap: 1.2rem;
+}
+
+#addSceneForm input[type="text"],
+#addSceneForm textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+
+#addSceneForm input:focus,
+#addSceneForm textarea:focus {
+  outline: none;
+  border-color: #5c6bc0;
+}
+
+#addSceneForm textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+#addSceneForm input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.2);
+}
+
+#addSceneForm label {
+  font-weight: 500;
+}
+
+/* Button styling */
+#addSceneForm button {
+  background-color: #3f51b5;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+#addSceneForm button:hover {
+  background-color: #303f9f;
+}
+
+/* Scene list styles */
+#sceneList,
+#editSceneList {
+  list-style-type: none;
+  padding: 0;
+}
+
+#sceneList li,
+#editSceneList li {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+#sceneList li:hover,
+#editSceneList li:hover {
+  background: #f1f1f1;
+}
+
+#editSceneList button {
+  background-color: #e0e0e0;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  margin-left: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+#editSceneList button:hover {
+  background-color: #c5c5c5;
+}
+
+#editSceneList button:first-of-type {
+  color: #1976d2;
+}
+
+#editSceneList button:last-of-type {
+  color: #d32f2f;
+}

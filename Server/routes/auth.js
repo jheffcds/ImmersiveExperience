@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
@@ -13,12 +15,32 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
+    // Create new user
     const user = new User({ name, email, password });
+    await user.save();
+
+    // Create a folder for the user's profile images
+    const userId = user._id.toString();
+    const userDir = path.join(__dirname, '..', 'public', 'uploads', 'profile', userId);
+
+    if (!fs.existsSync(userDir)) {
+      fs.mkdirSync(userDir, { recursive: true });
+    }
+
+    // Copy default profile image to user's folder
+    const defaultImagePath = path.join(__dirname, '..', 'public', 'uploads', 'profile', 'default.jpg');
+    const userImagePath = path.join(userDir, 'profile.jpg');
+
+    fs.copyFileSync(defaultImagePath, userImagePath);
+
+    // Save the profile picture path in the user document
+    user.profilePicture = `/uploads/profile/${userId}/profile.jpg`;
     await user.save();
 
     res.status(201).json({ message: 'User created successfully' });
@@ -27,6 +49,7 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Login an existing user
 router.post('/login', async (req, res) => {

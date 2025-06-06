@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
-const adminAuth = require('../middleware/adminAuth'); // ✅ now using the real one
+const adminAuth = require('../middleware/requireAdmin'); 
 const auth = require('../middleware/auth');
 
 // GET all scenes

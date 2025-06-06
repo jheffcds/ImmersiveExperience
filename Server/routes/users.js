@@ -18,7 +18,7 @@ router.put('/update', authenticateToken, upload.single('profilePicture'), async 
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user.userId,
       { $set: updates },
       { new: true, select: 'name email address profilePicture' }
     );
@@ -38,7 +38,7 @@ router.put('/change-password', authenticateToken, async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await User.findByIdAndUpdate(req.user.id, { password: hashedPassword });
+    await User.findByIdAndUpdate(req.user.userId, { password: hashedPassword });
     res.json({ message: 'Password updated successfully.' });
   } catch (err) {
     res.status(500).json({ message: 'Password change failed.', error: err.message });

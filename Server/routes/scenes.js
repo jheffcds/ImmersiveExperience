@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
-const adminAuth = require('../middleware/requireAdmin'); 
 const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/adminAuth');
 
 // GET all scenes
 router.get('/', async (req, res) => {

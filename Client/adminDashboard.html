@@ -1,29 +1,155 @@
-<!-- Client/adminDashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verity - Admin Dashboard</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
-  <button onclick="logout()">Logout</button>
 
-  <h2>Add New Scene</h2>
-  <form id="addSceneForm">
-    <input type="text" id="title" placeholder="Title" required />
-    <textarea id="description" placeholder="Description"></textarea>
-    <input type="text" id="link" placeholder="Scene URL" />
-    <input type="checkbox" id="isAvailable" /> Available
-    <input type="checkbox" id="featured" /> Featured
-    <input type="text" id="images" placeholder="Image URLs comma separated" />
-    <button type="submit">Add Scene</button>
-  </form>
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="logo-container">
+    <a href="index.html">
+      <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
+    </a>
+    <h1 class="logo-text" id="logoText">VR</h1>
+  </div>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="projects.html">Explore</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><button id="logoutBtn" class="btn logout-btn">Logout</button></li>
+  </ul>
+</nav>
 
-  <h2>All Scenes</h2>
-  <ul id="sceneList"></ul>
+<!-- Admin Dashboard Layout -->
+<main class="dashboard-container">
+  <aside class="sidebar">
+    <img src="uploads/profile/admin.png" alt="Admin" class="admin-avatar" />
+    <h2 id="adminName">Admin</h2>
+    <ul class="admin-nav">
+      <li><button class="sidebar-btn" onclick="showSection('addScene')">Add a New Scene</button></li>
+      <li><button class="sidebar-btn" onclick="showSection('viewScenes')">View Scenes</button></li>
+      <li><button class="sidebar-btn" onclick="showSection('editScenes')">Edit Scenes</button></li>
+    </ul>
+  </aside>
 
-  <script src="js/adminDashboard.js"></script>
+  <section class="content" id="adminContent">
+    <!-- Dynamic content will be rendered here -->
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
+    <p>Contact: <a href="mailto:jheffersoncastrodossantos@gmail.com">jheffersoncastrodossantos@gmail.com</a></p>
+    <div class="social-links">
+      <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
+      <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/main.js"></script>
+<script src="js/adminDashboard.js"></script>
+
+<script>
+  // Simple section switcher
+  function showSection(section) {
+    const content = document.getElementById('adminContent');
+    content.innerHTML = ''; // Clear previous
+
+    if (section === 'addScene') {
+      content.innerHTML = `
+        <h2>Add New Scene</h2>
+        <form id="addSceneForm">
+          <input type="text" id="title" placeholder="Title" required />
+          <textarea id="description" placeholder="Description"></textarea>
+          <input type="text" id="link" placeholder="Scene URL" />
+          <input type="checkbox" id="isAvailable" /> Available
+          <input type="checkbox" id="featured" /> Featured
+          <input type="text" id="images" placeholder="Image URLs, comma separated" />
+          <button type="submit">Add Scene</button>
+        </form>
+      `;
+    } else if (section === 'viewScenes') {
+      content.innerHTML = `
+        <h2>All Scenes</h2>
+        <ul id="sceneList">Loading scenes...</ul>
+      `;
+      loadScenes();
+    } else if (section === 'editScenes') {
+      content.innerHTML = `
+        <h2>Edit Scenes</h2>
+        <ul id="editSceneList">Loading scenes for editing...</ul>
+      `;
+      loadEditableScenes();
+    }
+  }
+
+  function loadScenes() {
+    fetch('/api/admin/scenes', {
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('sceneList');
+      list.innerHTML = '';
+      data.forEach(scene => {
+        const li = document.createElement('li');
+        li.textContent = `${scene.title} - ${scene.description}`;
+        list.appendChild(li);
+      });
+    });
+  }
+
+  function loadEditableScenes() {
+    fetch('/api/admin/scenes', {
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    })
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('editSceneList');
+      list.innerHTML = '';
+      data.forEach(scene => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${scene.title}</strong>
+          <button onclick="editScene('${scene._id}')">Edit</button>
+          <button onclick="deleteScene('${scene._id}')">Delete</button>
+        `;
+        list.appendChild(li);
+      });
+    });
+  }
+
+  function editScene(id) {
+    alert('Edit functionality not implemented yet for ID: ' + id);
+  }
+
+  function deleteScene(id) {
+    if (confirm('Are you sure you want to delete this scene?')) {
+      fetch('/api/admin/scenes/' + id, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+      })
+      .then(res => res.json())
+      .then(() => showSection('editScenes'));
+    }
+  }
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', () => {
+    showSection('addScene');
+  });
+</script>
+
 </body>
 </html>

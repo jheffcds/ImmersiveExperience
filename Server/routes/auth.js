@@ -4,51 +4,55 @@ const path = require('path');
 const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const auth = require('../middleware/auth');
 const { OAuth2Client } = require('google-auth-library');
 
 // Google OAuth2 Client
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-    // Create new user
+    // Create user first to get ID
     const user = new User({ name, email, password });
     await user.save();
 
-    // Create a folder for the user's profile images
-    const userId = user._id.toString();
-    const userDir = path.join(__dirname, '..', 'public', 'uploads', 'profile', userId);
-
-    if (!fs.existsSync(userDir)) {
-      fs.mkdirSync(userDir, { recursive: true });
+    // Create user-specific folder
+    const userFolder = path.join(__dirname, '..', 'public', 'uploads', 'profile', user._id.toString());
+    if (!fs.existsSync(userFolder)) {
+      fs.mkdirSync(userFolder, { recursive: true });
     }
 
-    // Copy default profile image to user's folder
-    const defaultImagePath = path.join(__dirname, '..', 'public', 'uploads', 'profile', 'default.jpg');
-    const userImagePath = path.join(userDir, 'profile.jpg');
+    // Copy default image
+    const defaultImagePath = path.join(__dirname, '..', 'public', 'uploads', 'profile', 'default.png');
+    const userImagePath = path.join(userFolder, 'default.png');
 
-    fs.copyFileSync(defaultImagePath, userImagePath);
+    try {
+      fs.copyFileSync(defaultImagePath, userImagePath);
+    } catch (fileErr) {
+      console.error('Error copying default image:', fileErr);
+      return res.status(500).json({ message: 'Failed to set up profile image.' });
+    }
 
-    // Save the profile picture path in the user document
-    user.profilePicture = `/uploads/profile/${userId}/profile.jpg`;
-    await user.save();
+    // Update profilePicture path in DB
+    await User.findByIdAndUpdate(user._id, {
+      profilePicture: `/uploads/profile/${user._id}/default.png`
+    });
 
-    res.status(201).json({ message: 'User created successfully' });
+    return res.status(201).json({ message: 'User created successfully' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Registration error:', err);
+    return res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 // Login an existing user

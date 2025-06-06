@@ -58,25 +58,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const res = await fetch('/api/user/update', {
+    const res = await fetch('/api/user/update', {
         method: 'PUT',
         headers: {
-          Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
         },
         body: formData
-      });
+    });
 
-      if (!res.ok) throw new Error('Update failed');
+    const result = await res.json();
 
-      const updated = await res.json();
-      localStorage.setItem('userName', updated.name);
-      localStorage.setItem('userPicture', updated.profilePicture);
-
-      alert('Profile updated!');
-      window.location.href = '/dashboard.html';
-    } catch (err) {
-      alert('Update failed: ' + err.message);
+    if (!res.ok) {
+        throw new Error(result.message || 'Update failed');
     }
+
+    localStorage.setItem('userName', result.name);
+    localStorage.setItem('userPicture', result.profilePicture);
+
+    alert('Profile updated!');
+    window.location.href = '/dashboard.html';
+
+    } catch (err) {
+    alert('Update failed: ' + err.message);
+    }
+
   });
 
   // Handle Change Password Modal

@@ -20,13 +20,18 @@ router.put('/update', authenticateToken, upload.single('profilePicture'), async 
     const updatedUser = await User.findByIdAndUpdate(
       req.user.userId,
       { $set: updates },
-      { new: true, select: 'name email address profilePicture' }
+      { new: true, select: 'name email address profilePicture', runValidators: true }
     );
     res.json(updatedUser);
   } catch (err) {
+    // Duplicate key error for email
+    if (err.code === 11000 && err.keyPattern?.email) {
+      return res.status(400).json({ message: 'Email already in use.' });
+    }
     res.status(500).json({ message: 'Update failed', error: err.message });
   }
 });
+
 
 // Change password route
 router.put('/change-password', authenticateToken, async (req, res) => {

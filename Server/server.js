@@ -11,7 +11,7 @@ const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
 const configRoutes = require('./routes/config');
 const userRoutes = require('./routes/users');
-const purchaseRoutes = require('./routes/purchases');
+const purchaseRoutes = require('./routes/purchase');
 const adminSceneRoutes = require('./routes/adminScenes');
 // API routes
 app.use('/api/auth', authRoutes);

@@ -14,8 +14,10 @@ function showSection(section) {
           <input type="text" id="title" placeholder="Title" required />
           <textarea id="description" placeholder="Description"></textarea>
           <input type="text" id="link" placeholder="Scene URL" />
-          <input type="checkbox" id="isAvailable" /> Available
-          <input type="checkbox" id="featured" /> Featured
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="isAvailable" /> <span>Available</span></label>
+            <label><input type="checkbox" id="featured" /> <span>Featured</span></label>
+          </div>
           <input type="text" id="images" placeholder="Image URLs, comma separated" />
           <button type="submit">Add Scene</button>
         </form>

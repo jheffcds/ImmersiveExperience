@@ -3,7 +3,7 @@
   padding: 2rem;
   max-width: 900px;
   margin: 2rem auto;
-  background: #ffffff;
+  background: #757575;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -42,10 +42,26 @@
   min-height: 120px;
 }
 
-#addSceneForm input[type="checkbox"] {
-  margin-right: 0.5rem;
-  transform: scale(1.2);
+.checkbox-group {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
 }
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #444;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+  width: 18px;
+  height: 18px;
+}
+
 
 #addSceneForm label {
   font-weight: 500;

@@ -18,7 +18,8 @@ function showSection(section) {
             <label><input type="checkbox" id="isAvailable" /> <span>Available</span></label>
             <label><input type="checkbox" id="featured" /> <span>Featured</span></label>
           </div>
-          <input type="text" id="images" placeholder="Image URLs, comma separated" />
+          <label for="images">Upload Images</label>
+          <input type="file" id="images" name="images" accept="image/*" multiple />
           <button type="submit">Add Scene</button>
         </form>
       `;
@@ -39,30 +40,36 @@ function showSection(section) {
 
 function submitScene(e) {
   e.preventDefault();
-  const scene = {
-    title: document.getElementById('title').value,
-    description: document.getElementById('description').value,
-    link: document.getElementById('link').value,
-    isAvailable: document.getElementById('isAvailable').checked,
-    featured: document.getElementById('featured').checked,
-    images: document.getElementById('images').value.split(',').map(img => img.trim())
-  };
+
+  const form = document.getElementById('addSceneForm');
+  const formData = new FormData(form);
+
+  formData.append('title', document.getElementById('title').value);
+  formData.append('description', document.getElementById('description').value);
+  formData.append('link', document.getElementById('link').value);
+  formData.append('isAvailable', document.getElementById('isAvailable').checked);
+  formData.append('featured', document.getElementById('featured').checked);
+
+  const files = document.getElementById('images').files;
+  for (let i = 0; i < files.length; i++) {
+    formData.append('images', files[i]);
+  }
 
   fetch('/api/admin/scenes', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     },
-    body: JSON.stringify(scene)
+    body: formData
   })
-  .then(res => res.json())
-  .then(data => {
-    alert('Scene added successfully!');
-    document.getElementById('addSceneForm').reset();
-  })
-  .catch(err => alert('Error adding scene: ' + err.message));
+    .then(res => res.json())
+    .then(data => {
+      alert('Scene added successfully!');
+      form.reset();
+    })
+    .catch(err => alert('Error adding scene: ' + err.message));
 }
+
 
 function loadScenes() {
   fetch('/api/admin/scenes', {

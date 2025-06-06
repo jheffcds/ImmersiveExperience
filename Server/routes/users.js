@@ -82,4 +82,24 @@ router.put('/change-password', authenticateToken, async (req, res) => {
   }
 });
 
+router.delete('/delete', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    // Delete user folder
+    const userFolderPath = path.join(__dirname, '..', 'public', 'uploads', 'profile', userId);
+    if (fs.existsSync(userFolderPath)) {
+      fs.rmSync(userFolderPath, { recursive: true, force: true }); // Use rmSync instead of rmdirSync
+    }
+
+    // Delete user from DB
+    await User.findByIdAndDelete(userId);
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    console.error('Delete profile error:', err);
+    res.status(500).json({ message: 'Failed to delete user.' });
+  }
+});
+
 module.exports = router;

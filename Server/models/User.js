@@ -8,8 +8,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profilePicture: { type: String, default: 'uploads/profile/default.png' },  // 👈 new field
   address: { type: String, default: '' }, 
-  role: { type: String, default: 'user' }
-});
+  role: { type: String, default: 'user' },
+  favourites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene' }],
+  purchasedScenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene' }],
+}
+, { timestamps: true }); // timestamps for createdAt and updatedAt
 
 // Password hashing middleware
 userSchema.pre('save', async function (next) {

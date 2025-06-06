@@ -48,7 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('userName', data.name || 'User');
       localStorage.setItem('userPicture', data.picture || 'uploads/profile/default.png');
 
-      window.location.href = '/dashboard.html';
+      if (data.role === 'admin') {
+        window.location.href = '/adminDashboard.html';
+      } else {
+        window.location.href = '/dashboard.html';
+      }
+
     } catch (err) {
       signInError.textContent = 'Network error. Please try again.';
       signInError.classList.remove('hidden');
@@ -135,7 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('userName', data.name || 'User');
       localStorage.setItem('userPicture', data.picture || 'uploads/profile/default.png');
-      window.location.href = '/dashboard.html';
+      if (data.role === 'admin') {
+        window.location.href = '/adminDashboard.html';
+      } else {
+        window.location.href = '/dashboard.html';
+      }
+
     } catch (err) {
       alert('Google login error: ' + err.message);
     }

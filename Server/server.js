@@ -11,7 +11,8 @@ const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
 const configRoutes = require('./routes/config');
 const userRoutes = require('./routes/users');
-
+const purchaseRoutes = require('./routes/purchases');
+const adminSceneRoutes = require('./routes/adminScenes');
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
@@ -19,6 +20,8 @@ app.use('/api/scenes', sceneRoutes);
 app.use('/api/config', configRoutes);
 app.use('/uploads', express.static('public/uploads'));
 app.use('/api/user', userRoutes);
+app.use('/api/purchases', purchaseRoutes);
+app.use('/api/admin/scenes', adminSceneRoutes);
 
 // Serve static frontend files from the Client directory
 try {

@@ -1,0 +1,29 @@
+<!-- Client/adminDashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <button onclick="logout()">Logout</button>
+
+  <h2>Add New Scene</h2>
+  <form id="addSceneForm">
+    <input type="text" id="title" placeholder="Title" required />
+    <textarea id="description" placeholder="Description"></textarea>
+    <input type="text" id="link" placeholder="Scene URL" />
+    <input type="checkbox" id="isAvailable" /> Available
+    <input type="checkbox" id="featured" /> Featured
+    <input type="text" id="images" placeholder="Image URLs comma separated" />
+    <button type="submit">Add Scene</button>
+  </form>
+
+  <h2>All Scenes</h2>
+  <ul id="sceneList"></ul>
+
+  <script src="js/adminDashboard.js"></script>
+</body>
+</html>

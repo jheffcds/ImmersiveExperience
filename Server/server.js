@@ -10,12 +10,16 @@ const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
 const configRoutes = require('./routes/config');
+const userRoutes = require('./routes/users');
 
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
 app.use('/api/scenes', sceneRoutes);
 app.use('/api/config', configRoutes);
+app.use('/uploads', express.static('public/uploads'));
+app.use('/api/user', userRoutes);
+
 // Serve static frontend files from the Client directory
 try {
   app.use(express.static(path.join(__dirname, '../Client')));

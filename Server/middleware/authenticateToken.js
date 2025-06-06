@@ -10,9 +10,6 @@ module.exports = function (req, res, next) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log('Decoded JWT:', decoded);
-    console.log('User ID:', decoded.userId);
-    console.log('🧪 Authenticated user ID:', decoded.id || decoded._id);
-    console.log('User Name:', decoded.name);
     req.user = decoded;
     next();
   } catch (err) {

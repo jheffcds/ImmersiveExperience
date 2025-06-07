@@ -1,13 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  
-  if (user) {
-    const nameElement = document.getElementById('adminName');
-    const avatarElement = document.querySelector('.admin-avatar');
+  const cachedName = localStorage.getItem('userName') || 'John Doe';
+  const cachedPicture = localStorage.getItem('userPicture') || 'uploads/profile/default.png';
 
-    nameElement.textContent = user.name || 'Admin';
-    avatarElement.src = user.profilePicture || 'uploads/profile/default.png';
-  }
+    nameElement.textContent = cachedName|| 'Admin';
+    avatarElement.src = cachedPicture || 'public/uploads/profile/default.png';
 
   showSection('addScene');
 });

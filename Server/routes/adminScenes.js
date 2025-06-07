@@ -95,7 +95,7 @@ router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
 });
 
 // Delete scene
-rrouter.delete('/:id', authenticateToken, adminAuth, async (req, res) => {
+router.delete('/:id', authenticateToken, adminAuth, async (req, res) => {
   try {
     const scene = await Scene.findById(req.params.id);
     if (!scene) return res.status(404).json({ message: 'Scene not found' });

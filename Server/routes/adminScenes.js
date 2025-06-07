@@ -7,25 +7,13 @@ const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
-// Dynamic Multer middleware for scene-specific folder
-function createSceneUploadMiddleware(sceneId) {
-  const scenePath = path.join(__dirname, '..', 'scenes', sceneId);
-  if (!fs.existsSync(scenePath)) {
-    fs.mkdirSync(scenePath, { recursive: true });
-  }
-
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, scenePath),
-    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
-  });
-
-  return multer({ storage }).array('images', 10);
-}
+const createSceneUploadMiddleware = require('../middleware/uploadSceneImages');
 
 // Create new scene with images
 router.post('/', authenticateToken, adminAuth, async (req, res) => {
   const sceneId = uuidv4();
+
+  // Multer parsing for non-file fields first
   const tempMulter = multer().none();
 
   tempMulter(req, res, async err => {
@@ -37,7 +25,9 @@ router.post('/', authenticateToken, adminAuth, async (req, res) => {
       return res.status(400).json({ message: 'Invalid price value' });
     }
 
+    // Use the imported upload middleware
     const upload = createSceneUploadMiddleware(sceneId);
+
     upload(req, res, async err => {
       if (err) return res.status(500).json({ message: 'Image upload failed', error: err.message });
 
@@ -68,6 +58,8 @@ router.post('/', authenticateToken, adminAuth, async (req, res) => {
     });
   });
 });
+
+
 
 // Get all scenes
 router.get('/', authenticateToken, adminAuth, async (req, res) => {

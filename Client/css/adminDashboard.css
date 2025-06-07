@@ -175,4 +175,65 @@
   border: 2px solid #ccc;
   border-radius: 8px;
 }
+.sidebar {
+  background-color: #1e1e2f;
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.admin-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem auto;
+  display: block;
+  border: 3px solid #4e8cff;
+}
+
+#adminName {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.admin-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-nav li {
+  margin-bottom: 1rem;
+}
+
+.sidebar-btn {
+  width: 100%;
+  background: #2c2c3f;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar-btn:hover {
+  background: #4e8cff;
+  transform: translateY(-2px);
+}
+
+.sidebar-btn:active {
+  transform: translateY(0);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
 

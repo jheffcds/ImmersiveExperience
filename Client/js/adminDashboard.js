@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const nameElement = document.getElementById('adminName');
+  const avatarElement = document.querySelector('.admin-avatar');
   const cachedName = localStorage.getItem('userName') || 'John Doe';
   const cachedPicture = localStorage.getItem('userPicture') || 'uploads/profile/default.png';
 
-    nameElement.textContent = cachedName|| 'Admin';
-    avatarElement.src = cachedPicture || 'public/uploads/profile/default.png';
+  nameElement.textContent = cachedName|| 'Admin';
+  avatarElement.src = cachedPicture || 'public/uploads/profile/default.png';
 
   showSection('addScene');
 });

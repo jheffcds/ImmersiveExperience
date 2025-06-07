@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   showSection('addScene');
 
-  document.getElementById('editSceneForm').addEventListener('submit', submitEditScene);
+  const editForm = document.getElementById('editSceneForm');
+  if (editForm) {
+    editForm.addEventListener('submit', submitEditScene);
+  }
 });
 
 function showSection(section) {

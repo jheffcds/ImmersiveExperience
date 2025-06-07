@@ -8,7 +8,80 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/adminDashboard.css" />
 
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal.show {
+      display: block;
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      width: 400px;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .scene-card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .scene-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 250px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .scene-card img.scene-card-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .scene-card-body {
+      padding: 10px;
+    }
+
+    .scene-card-body button {
+      margin-top: 10px;
+      padding: 6px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .scene-card-body button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
+
 <body>
 
 <!-- Navigation -->
@@ -34,9 +107,21 @@
     <img src="uploads/profile/admin.png" alt="Admin" class="admin-avatar" />
     <h2 id="adminName">Admin</h2>
     <ul class="admin-nav">
-      <li><button class="sidebar-btn" onclick="showSection('addScene')">Add a New Scene</button></li>
-      <li><button class="sidebar-btn" onclick="showSection('viewScenes')">View Scenes</button></li>
-      <li><button class="sidebar-btn" onclick="showSection('editScenes')">Edit Scenes</button></li>
+      <li>
+        <button class="sidebar-btn" onclick="showSection('addScene')">
+          <span class="icon">➕</span> Add Scene
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-btn" onclick="showSection('viewScenes')">
+          <span class="icon">👁️</span> View Scenes
+        </button>
+      </li>
+      <li>
+        <button class="sidebar-btn" onclick="showSection('editScenes')">
+          <span class="icon">✏️</span> Edit Scenes
+        </button>
+      </li>
     </ul>
   </aside>
 
@@ -45,6 +130,21 @@
   </section>
 </main>
 
+<!-- Modal for editing scenes -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditModal()">&times;</span>
+    <h2>Edit Scene</h2>
+    <form id="editSceneForm">
+      <input type="hidden" id="editSceneId" />
+      <input type="text" id="editTitle" placeholder="Title" required />
+      <textarea id="editDescription" placeholder="Description"></textarea>
+      <input type="text" id="editLink" placeholder="Scene URL" />
+      <input type="number" id="editPrice" placeholder="Price" step="0.01" min="0" />
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</div>
 
 <!-- Scripts -->
 <script src="js/main.js"></script>

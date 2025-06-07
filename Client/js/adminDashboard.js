@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  if (user) {
+    const nameElement = document.getElementById('adminName');
+    const avatarElement = document.querySelector('.admin-avatar');
+
+    nameElement.textContent = user.name || 'Admin';
+    avatarElement.src = user.profilePicture || 'uploads/profile/default.png';
+  }
+
   showSection('addScene');
 });
 

@@ -18,8 +18,14 @@ function showSection(section) {
             <label><input type="checkbox" id="isAvailable" /> <span>Available</span></label>
             <label><input type="checkbox" id="featured" /> <span>Featured</span></label>
           </div>
-          <label for="images">Upload Images</label>
-          <input type="file" id="images" name="images" accept="image/*" multiple />
+          <div class="form-group">
+          <label for="images" class="form-label">Upload Images</label>
+          <div class="custom-file-upload">
+            <label for="images" class="upload-label">Choose Images</label>
+            <input type="file" id="images" name="images" accept="image/*" multiple hidden />
+            <div id="previewContainer" class="preview-container"></div>
+          </div>
+        </div>
           <button type="submit">Add Scene</button>
         </form>
       `;

@@ -12,52 +12,44 @@ const createSceneUploadMiddleware = require('../middleware/uploadSceneImages');
 // Create new scene with images
 router.post('/', authenticateToken, adminAuth, async (req, res) => {
   const sceneId = uuidv4();
+  const upload = createSceneUploadMiddleware(sceneId);
 
-  // Multer parsing for non-file fields first
-  const tempMulter = multer().none();
+  upload(req, res, async err => {
+    if (err) return res.status(500).json({ message: 'Image upload failed', error: err.message });
 
-  tempMulter(req, res, async err => {
-    if (err) return res.status(500).json({ message: 'Form parsing failed', error: err.message });
-
-    // Validate price
-    const price = parseFloat(req.body.price);
-    if (isNaN(price) || price < 0) {
-      return res.status(400).json({ message: 'Invalid price value' });
-    }
-
-    // Use the imported upload middleware
-    const upload = createSceneUploadMiddleware(sceneId);
-
-    upload(req, res, async err => {
-      if (err) return res.status(500).json({ message: 'Image upload failed', error: err.message });
-
-      try {
-        const imagePaths = req.files.map(file =>
-          path.join('scenes', sceneId, file.filename).replace(/\\/g, '/')
-        );
-
-        const isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
-        const featured = req.body.featured === 'true' || req.body.featured === true;
-
-        const scene = new Scene({
-          sceneId,
-          title: req.body.title,
-          description: req.body.description,
-          link: req.body.link,
-          price,
-          isAvailable,
-          featured,
-          images: imagePaths
-        });
-
-        await scene.save();
-        res.status(201).json(scene);
-      } catch (err) {
-        res.status(500).json({ message: 'Error saving scene', error: err.message });
+    try {
+      // Validate price (parse from req.body.price)
+      const price = parseFloat(req.body.price);
+      if (isNaN(price) || price < 0) {
+        return res.status(400).json({ message: 'Invalid price value' });
       }
-    });
+
+      const imagePaths = req.files.map(file =>
+        path.join('scenes', sceneId, file.filename).replace(/\\/g, '/')
+      );
+
+      const isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
+      const featured = req.body.featured === 'true' || req.body.featured === true;
+
+      const scene = new Scene({
+        sceneId,
+        title: req.body.title,
+        description: req.body.description,
+        link: req.body.link,
+        price,
+        isAvailable,
+        featured,
+        images: imagePaths
+      });
+
+      await scene.save();
+      res.status(201).json(scene);
+    } catch (err) {
+      res.status(500).json({ message: 'Error saving scene', error: err.message });
+    }
   });
 });
+
 
 
 

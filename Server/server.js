@@ -23,13 +23,20 @@ app.use('/uploads', express.static('public/uploads'));
 app.use('/api/user', userRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin/scenes', adminSceneRoutes);
+// Serve static scene images
+try {
+  app.use('/scenes', express.static(path.join(__dirname, 'scenes')));
+  console.log('✔ access to scene folder granted');
+} catch (err) {
+  console.error('access to scene folder denied:', err.message);
+}
 
 // Serve static frontend files from the Client directory
 try {
   app.use(express.static(path.join(__dirname, '../Client')));
   console.log('✔ Static client files registered');
 } catch (err) {
-  console.error('Failed to register static client files:', err.message);
+  console.error('access to upload folder denied:', err.message);
 }
 // Serve uploads folder statically
 try {

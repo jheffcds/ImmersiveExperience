@@ -4,15 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const cachedName = localStorage.getItem('userName') || 'John Doe';
   const cachedPicture = localStorage.getItem('userPicture') || 'uploads/profile/default.png';
 
-  nameElement.textContent = cachedName|| 'Admin';
-  avatarElement.src = cachedPicture || 'public/uploads/profile/default.png';
+  nameElement.textContent = cachedName || 'Admin';
+  avatarElement.src = cachedPicture;
 
   showSection('addScene');
+
+  document.getElementById('editSceneForm').addEventListener('submit', submitEditScene);
 });
 
 function showSection(section) {
   const content = document.getElementById('adminContent');
-  content.innerHTML = ''; // Clear previous content
+  content.innerHTML = '';
 
   switch (section) {
     case 'addScene':
@@ -22,6 +24,7 @@ function showSection(section) {
           <input type="text" id="title" placeholder="Title" required />
           <textarea id="description" placeholder="Description"></textarea>
           <input type="text" id="link" placeholder="Scene URL" />
+          <input type="number" id="price" placeholder="Price" step="0.01" min="0" />
 
           <div class="checkbox-group">
             <label><input type="checkbox" id="isAvailable" /> <span>Available</span></label>
@@ -40,7 +43,6 @@ function showSection(section) {
           <button type="submit">Add Scene</button>
         </form>
       `;
-
       document.getElementById('addSceneForm').addEventListener('submit', submitScene);
       document.getElementById('images').addEventListener('change', previewImages);
       break;
@@ -75,13 +77,13 @@ function previewImages() {
 
 function submitScene(e) {
   e.preventDefault();
-
   const form = document.getElementById('addSceneForm');
   const formData = new FormData();
 
   formData.append('title', document.getElementById('title').value);
   formData.append('description', document.getElementById('description').value);
   formData.append('link', document.getElementById('link').value);
+  formData.append('price', document.getElementById('price').value);
   formData.append('isAvailable', document.getElementById('isAvailable').checked);
   formData.append('featured', document.getElementById('featured').checked);
 
@@ -116,10 +118,22 @@ function loadScenes() {
     .then(data => {
       const list = document.getElementById('sceneList');
       list.innerHTML = '';
+      list.classList.add('scene-card-container');
+
       data.forEach(scene => {
-        const li = document.createElement('li');
-        li.textContent = `${scene.title} - ${scene.description}`;
-        list.appendChild(li);
+        const imagePath = scene.images?.[0] ? `/${scene.images[0]}` : 'assets/images/placeholder.png';
+
+        const card = document.createElement('div');
+        card.classList.add('scene-card');
+
+        card.innerHTML = `
+          <img src="${imagePath}" alt="${scene.title}" class="scene-card-image" />
+          <div class="scene-card-body">
+            <h3 class="scene-card-title">${scene.title}</h3>
+            <p class="scene-card-description">${scene.description || ''}</p>
+          </div>
+        `;
+        list.appendChild(card);
       });
     })
     .catch(err => console.error('Error loading scenes:', err));
@@ -135,17 +149,83 @@ function loadEditableScenes() {
     .then(data => {
       const list = document.getElementById('editSceneList');
       list.innerHTML = '';
+      list.classList.add('scene-card-container');
+
       data.forEach(scene => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <strong>${scene.title}</strong>
-          <button onclick="editScene('${scene._id}')">Edit</button>
-          <button onclick="deleteScene('${scene._id}')">Delete</button>
+        const imagePath = scene.images?.[0] ? `/${scene.images[0]}` : 'assets/images/placeholder.png';
+
+        const card = document.createElement('div');
+        card.classList.add('scene-card');
+
+        card.innerHTML = `
+          <img src="${imagePath}" alt="${scene.title}" class="scene-card-image" />
+          <div class="scene-card-body">
+            <h3 class="scene-card-title">${scene.title}</h3>
+            <p class="scene-card-description">${scene.description || ''}</p>
+            <button onclick="editScene('${scene._id}')">Edit</button>
+            <button onclick="deleteScene('${scene._id}')">Delete</button>
+          </div>
         `;
-        list.appendChild(li);
+
+        list.appendChild(card);
       });
     })
-    .catch(err => console.error('Error loading scenes for editing:', err));
+    .catch(err => console.error('Error loading editable scenes:', err));
+}
+
+function editScene(id) {
+  fetch(`/api/admin/scenes/${id}`, {
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    }
+  })
+    .then(res => res.json())
+    .then(scene => {
+      document.getElementById('editSceneId').value = scene._id;
+      document.getElementById('editTitle').value = scene.title;
+      document.getElementById('editDescription').value = scene.description || '';
+      document.getElementById('editLink').value = scene.link || '';
+      document.getElementById('editPrice').value = scene.price || '';
+
+      openEditModal();
+    })
+    .catch(err => alert('Failed to load scene: ' + err.message));
+}
+
+function openEditModal() {
+  document.getElementById('editModal').classList.add('show');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('show');
+}
+
+function submitEditScene(e) {
+  e.preventDefault();
+
+  const id = document.getElementById('editSceneId').value;
+  const updatedData = {
+    title: document.getElementById('editTitle').value,
+    description: document.getElementById('editDescription').value,
+    link: document.getElementById('editLink').value,
+    price: parseFloat(document.getElementById('editPrice').value),
+  };
+
+  fetch(`/api/admin/scenes/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: JSON.stringify(updatedData)
+  })
+    .then(res => res.json())
+    .then(() => {
+      alert('Scene updated successfully!');
+      closeEditModal();
+      showSection('editScenes');
+    })
+    .catch(err => alert('Failed to update scene: ' + err.message));
 }
 
 function deleteScene(id) {
@@ -163,8 +243,4 @@ function deleteScene(id) {
       showSection('editScenes');
     })
     .catch(err => console.error('Error deleting scene:', err));
-}
-
-function editScene(id) {
-  alert(`Edit functionality for scene ID ${id} coming soon.`);
 }

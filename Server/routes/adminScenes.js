@@ -79,9 +79,43 @@ router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
     return res.status(500).json({ message: 'Error finding scene', error: err.message });
   }
 
-  const upload = createSceneUploadMiddleware(scene.sceneId);
+  // Check if request is multipart/form-data (i.e., image upload)
+  const isMultipart = req.headers['content-type']?.startsWith('multipart/form-data');
 
-  upload(req, res, async (err) => {
+  if (!isMultipart) {
+    // No image upload — handle JSON-only update
+    try {
+      const price = req.body.price ? parseFloat(req.body.price) : scene.price;
+      if (isNaN(price) || price < 0) {
+        return res.status(400).json({ message: 'Invalid price value' });
+      }
+
+      const removedImages = req.body.removedImages ? JSON.parse(req.body.removedImages) : [];
+      removedImages.forEach(image => {
+        const imagePath = path.join(__dirname, '..', image);
+        fs.unlink(imagePath, err => {
+          if (err) console.error(`Failed to delete image: ${image}`, err);
+        });
+      });
+
+      scene.images = scene.images.filter(img => !removedImages.includes(img));
+      scene.title = req.body.title || scene.title;
+      scene.description = req.body.description || scene.description;
+      scene.link = req.body.link || scene.link;
+      scene.price = price;
+      scene.isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
+      scene.featured = req.body.featured === 'true' || req.body.featured === true;
+
+      const updatedScene = await scene.save();
+      return res.json(updatedScene);
+    } catch (err) {
+      return res.status(500).json({ message: 'Error updating scene (no files)', error: err.message });
+    }
+  }
+
+  // If image upload is included, process through multer
+  const upload = createSceneUploadMiddleware(scene.sceneId);
+  upload(req, res, async err => {
     if (err) {
       return res.status(500).json({ message: 'Image upload failed', error: err.message });
     }
@@ -92,35 +126,31 @@ router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
         return res.status(400).json({ message: 'Invalid price value' });
       }
 
-      // Remove selected images from file system and DB
       const removedImages = req.body.removedImages ? JSON.parse(req.body.removedImages) : [];
       removedImages.forEach(image => {
         const imagePath = path.join(__dirname, '..', image);
-        fs.unlink(imagePath, (err) => {
+        fs.unlink(imagePath, err => {
           if (err) console.error(`Failed to delete image: ${image}`, err);
         });
       });
 
       scene.images = scene.images.filter(img => !removedImages.includes(img));
-
-      // Add any newly uploaded images
       const newImagePaths = req.files.map(file =>
         path.join('scenes', scene.sceneId, file.filename).replace(/\\/g, '/')
       );
 
-      // Update fields
-      scene.title = req.body.title ?? scene.title;
-      scene.description = req.body.description ?? scene.description;
-      scene.link = req.body.link ?? scene.link;
+      scene.images = [...scene.images, ...newImagePaths];
+      scene.title = req.body.title || scene.title;
+      scene.description = req.body.description || scene.description;
+      scene.link = req.body.link || scene.link;
       scene.price = price;
       scene.isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
       scene.featured = req.body.featured === 'true' || req.body.featured === true;
-      scene.images.push(...newImagePaths);
 
       const updatedScene = await scene.save();
       res.json(updatedScene);
     } catch (err) {
-      res.status(500).json({ message: 'Error updating scene', error: err.message });
+      res.status(500).json({ message: 'Error updating scene (with files)', error: err.message });
     }
   });
 });

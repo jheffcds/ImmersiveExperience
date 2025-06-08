@@ -189,11 +189,52 @@ function editScene(id) {
       document.getElementById('editDescription').value = scene.description || '';
       document.getElementById('editLink').value = scene.link || '';
       document.getElementById('editPrice').value = scene.price || '';
+      document.getElementById('editAvailable').checked = scene.isAvailable || false;
+      document.getElementById('editFeatured').checked = scene.featured || false;
+
+      const gallery = document.getElementById('editGallery');
+      gallery.innerHTML = '';
+      (scene.images || []).forEach((img, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('image-wrapper');
+
+        const image = document.createElement('img');
+        image.src = `/${img}`;
+        image.alt = 'Scene Image';
+
+        const delBtn = document.createElement('button');
+        delBtn.innerHTML = '&times;';
+        delBtn.className = 'delete-btn';
+        delBtn.onclick = () => removeImage(scene._id, img);
+
+        wrapper.appendChild(image);
+        wrapper.appendChild(delBtn);
+        gallery.appendChild(wrapper);
+      });
 
       openEditModal();
     })
     .catch(err => alert('Failed to load scene: ' + err.message));
 }
+function removeImage(sceneId, imagePath) {
+  if (!confirm('Delete this image from the gallery?')) return;
+
+  fetch(`/api/admin/scenes/${sceneId}/images`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    },
+    body: JSON.stringify({ image: imagePath })
+  })
+    .then(res => res.json())
+    .then(() => {
+      alert('Image deleted');
+      editScene(sceneId); // reload modal content
+    })
+    .catch(err => alert('Error deleting image: ' + err.message));
+}
+
 
 function openEditModal() {
   document.getElementById('editModal').classList.add('show');
@@ -207,20 +248,26 @@ function submitEditScene(e) {
   e.preventDefault();
 
   const id = document.getElementById('editSceneId').value;
-  const updatedData = {
-    title: document.getElementById('editTitle').value,
-    description: document.getElementById('editDescription').value,
-    link: document.getElementById('editLink').value,
-    price: parseFloat(document.getElementById('editPrice').value),
-  };
+  const formData = new FormData();
+
+  formData.append('title', document.getElementById('editTitle').value);
+  formData.append('description', document.getElementById('editDescription').value);
+  formData.append('link', document.getElementById('editLink').value);
+  formData.append('price', document.getElementById('editPrice').value);
+  formData.append('isAvailable', document.getElementById('editAvailable').checked);
+  formData.append('featured', document.getElementById('editFeatured').checked);
+
+  const newFiles = document.getElementById('editImages').files;
+  for (let i = 0; i < newFiles.length; i++) {
+    formData.append('images', newFiles[i]);
+  }
 
   fetch(`/api/admin/scenes/${id}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     },
-    body: JSON.stringify(updatedData)
+    body: formData
   })
     .then(res => res.json())
     .then(() => {
@@ -230,6 +277,7 @@ function submitEditScene(e) {
     })
     .catch(err => alert('Failed to update scene: ' + err.message));
 }
+
 
 function deleteScene(id) {
   if (!confirm('Are you sure you want to delete this scene?')) return;

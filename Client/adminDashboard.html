@@ -25,7 +25,10 @@
     }
 
     .modal-content {
-      background: #fff;
+      display: flex;
+      flex-direction: column;
+      background: #babcbc;
+      color: black;
       margin: 10% auto;
       padding: 20px;
       width: 400px;
@@ -82,6 +85,41 @@
     .scene-card-body button:hover {
       background-color: #0056b3;
     }
+    .preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.preview-container img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  position: relative;
+}
+
+.preview-container .image-wrapper {
+  position: relative;
+}
+
+.preview-container .delete-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(255, 0, 0, 0.7);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+}
+
   </style>
 </head>
 
@@ -139,13 +177,34 @@
     <span class="close" onclick="closeEditModal()">&times;</span>
     <h2>Edit Scene</h2>
     <form id="editSceneForm">
-      <input type="hidden" id="editSceneId" />
-      <input type="text" id="editTitle" placeholder="Title" required />
-      <textarea id="editDescription" placeholder="Description"></textarea>
-      <input type="text" id="editLink" placeholder="Scene URL" />
-      <input type="number" id="editPrice" placeholder="Price" step="0.01" min="0" />
-      <button type="submit">Save Changes</button>
-    </form>
+    <input type="hidden" id="editSceneId" />
+
+    <label for="editTitle">Title</label>
+    <input type="text" id="editTitle" required />
+
+    <label for="editDescription">Description</label>
+    <textarea id="editDescription" rows="3"></textarea>
+
+    <label for="editLink">Scene URL</label>
+    <input type="text" id="editLink" />
+
+    <label for="editPrice">Price</label>
+    <input type="number" id="editPrice" step="0.01" min="0" />
+
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="editAvailable" /> Available</label>
+      <label><input type="checkbox" id="editFeatured" /> Featured</label>
+    </div>
+
+    <div class="form-group">
+      <label>Gallery</label>
+      <div id="editGallery" class="preview-container"></div>
+      <label for="editImages" class="upload-label">Add Images</label>
+      <input type="file" id="editImages" accept="image/*" multiple />
+    </div>
+
+    <button type="submit">Save Changes</button>
+  </form>
   </div>
 </div>
 

@@ -50,9 +50,6 @@ router.post('/', authenticateToken, adminAuth, async (req, res) => {
   });
 });
 
-
-
-
 // Get all scenes
 router.get('/', authenticateToken, adminAuth, async (req, res) => {
   try {
@@ -65,17 +62,62 @@ router.get('/', authenticateToken, adminAuth, async (req, res) => {
 
 // Update scene
 router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
+  // First, find the existing scene by ID
+  let scene;
   try {
-    const updatedData = {
-      ...req.body,
-      price: req.body.price ? parseFloat(req.body.price) : 0
-    };
-
-    const updated = await Scene.findByIdAndUpdate(req.params.id, updatedData, { new: true });
-    res.json(updated);
+    scene = await Scene.findById(req.params.id);
+    if (!scene) return res.status(404).json({ message: 'Scene not found' });
   } catch (err) {
-    res.status(500).json({ message: 'Error updating scene', error: err.message });
+    return res.status(500).json({ message: 'Error finding scene', error: err.message });
   }
+
+  const upload = createSceneUploadMiddleware(scene.sceneId);
+
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Image upload failed', error: err.message });
+    }
+
+    try {
+      // Convert price safely
+      const price = req.body.price ? parseFloat(req.body.price) : scene.price;
+      if (isNaN(price) || price < 0) {
+        return res.status(400).json({ message: 'Invalid price value' });
+      }
+
+      // Get array of images to remove (if any)
+      const removedImages = req.body.removedImages ? JSON.parse(req.body.removedImages) : [];
+
+      // Remove deleted images from file system and from scene.images
+      removedImages.forEach(image => {
+        const imagePath = path.join(__dirname, '..', image);
+        fs.unlink(imagePath, (err) => {
+          if (err) console.error(`Failed to delete image: ${image}`, err);
+        });
+      });
+
+      scene.images = scene.images.filter(img => !removedImages.includes(img));
+
+      // Add newly uploaded files
+      const newImagePaths = req.files.map(file =>
+        path.join('scenes', scene.sceneId, file.filename).replace(/\\/g, '/')
+      );
+
+      // Update scene fields
+      scene.title = req.body.title || scene.title;
+      scene.description = req.body.description || scene.description;
+      scene.link = req.body.link || scene.link;
+      scene.price = price;
+      scene.isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
+      scene.featured = req.body.featured === 'true' || req.body.featured === true;
+      scene.images = [...scene.images, ...newImagePaths];
+
+      const updatedScene = await scene.save();
+      res.json(updatedScene);
+    } catch (err) {
+      res.status(500).json({ message: 'Error updating scene', error: err.message });
+    }
+  });
 });
 
 // Delete scene

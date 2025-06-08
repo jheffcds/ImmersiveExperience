@@ -26,26 +26,46 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new scene (admin only)
-router.post('/', auth, adminAuth, async (req, res) => {
-  const { title, description, isAvailable, link } = req.body;
+router.post('/', authenticateToken, adminAuth, (req, res) => {
+  const sceneId = uuidv4();
+  const upload = createSceneUploadMiddleware(sceneId);
 
-  if (!title || !link) {
-    return res.status(400).json({ message: 'Title and link are required' });
-  }
+  upload(req, res, async err => {
+    if (err) {
+      return res.status(500).json({ message: 'Image upload failed', error: err.message });
+    }
 
-  const newScene = new Scene({
-    title,
-    description,
-    isAvailable: isAvailable !== undefined ? isAvailable : true,
-    link
+    try {
+      const price = parseFloat(req.body.price);
+      if (isNaN(price) || price < 0) {
+        return res.status(400).json({ message: 'Invalid price value' });
+      }
+
+      const imagePaths = req.files.map(file =>
+        path.join('scenes', sceneId, file.filename).replace(/\\/g, '/')
+      );
+
+      const isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
+      const featured = req.body.featured === 'true' || req.body.featured === true;
+
+      const scene = new Scene({
+        sceneId,
+        title: req.body.title,
+        description: req.body.description,
+        link: req.body.link,
+        price,
+        isAvailable,
+        featured,
+        images: imagePaths
+      });
+
+      await scene.save();
+      res.status(201).json(scene);
+    } catch (err) {
+      res.status(500).json({ message: 'Error saving scene', error: err.message });
+    }
   });
-
-  try {
-    const savedScene = await newScene.save();
-    res.status(201).json(savedScene);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
 });
+
 
 module.exports = router;

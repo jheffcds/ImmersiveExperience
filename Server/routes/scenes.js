@@ -2,31 +2,34 @@ const express = require('express');
 const router = express.Router();
 const Scene = require('../models/Scene');
 const authenticateToken = require('../middleware/auth');
-
 const adminAuth = require('../middleware/adminAuth');
+const { v4: uuidv4 } = require('uuid');
+const path = require('path');
+const fs = require('fs');
+const createSceneUploadMiddleware = require('../middleware/uploadSceneImages');
 
-// GET all scenes
+// =================== GET: All scenes (public) ===================
 router.get('/', async (req, res) => {
   try {
     const scenes = await Scene.find();
     res.json(scenes);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Error fetching scenes', error: err.message });
   }
 });
 
-// GET scene by ID
+// =================== GET: Single scene by ID (public) ===================
 router.get('/:id', async (req, res) => {
   try {
     const scene = await Scene.findById(req.params.id);
     if (!scene) return res.status(404).json({ message: 'Scene not found' });
     res.json(scene);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: 'Error fetching scene', error: err.message });
   }
 });
 
-// POST new scene (admin only)
+// =================== POST: Create new scene (admin only) ===================
 router.post('/', authenticateToken, adminAuth, (req, res) => {
   const sceneId = uuidv4();
   const upload = createSceneUploadMiddleware(sceneId);
@@ -67,6 +70,5 @@ router.post('/', authenticateToken, adminAuth, (req, res) => {
     }
   });
 });
-
 
 module.exports = router;

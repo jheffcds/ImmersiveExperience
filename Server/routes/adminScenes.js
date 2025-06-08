@@ -96,5 +96,14 @@ router.delete('/:id', authenticateToken, adminAuth, async (req, res) => {
     res.status(500).json({ message: 'Error deleting scene', error: err.message });
   }
 });
+router.get('/:id', authenticateToken, adminAuth, async (req, res) => {
+  try {
+    const scene = await Scene.findById(req.params.id);
+    if (!scene) return res.status(404).json({ message: 'Scene not found' });
+    res.json(scene);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching scene', error: err.message });
+  }
+});
 
 module.exports = router;

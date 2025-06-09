@@ -128,6 +128,12 @@ function loadScenes() {
       data.forEach(scene => {
         const imagePath = scene.images?.[0] ? `/${scene.images[0]}` : 'assets/images/placeholder.png';
 
+        // Truncate description if too long
+        const description = scene.description || '';
+        const shortDescription = description.length > 100
+          ? description.substring(0, 100) + '...'
+          : description;
+
         const card = document.createElement('div');
         card.classList.add('scene-card');
 
@@ -135,7 +141,7 @@ function loadScenes() {
           <img src="${imagePath}" alt="${scene.title}" class="scene-card-image" />
           <div class="scene-card-body">
             <h3 class="scene-card-title">${scene.title}</h3>
-            <p class="scene-card-description">${scene.description || ''}</p>
+            <p class="scene-card-description">${shortDescription}</p>
           </div>
         `;
         list.appendChild(card);
@@ -143,6 +149,7 @@ function loadScenes() {
     })
     .catch(err => console.error('Error loading scenes:', err));
 }
+
 
 function loadEditableScenes() {
   fetch('/api/admin/scenes', {
@@ -159,6 +166,12 @@ function loadEditableScenes() {
       data.forEach(scene => {
         const imagePath = scene.images?.[0] ? `/${scene.images[0]}` : 'assets/images/placeholder.png';
 
+        // Truncate description if too long
+        const description = scene.description || '';
+        const shortDescription = description.length > 100
+          ? description.substring(0, 100) + '...'
+          : description;
+
         const card = document.createElement('div');
         card.classList.add('scene-card');
 
@@ -166,7 +179,7 @@ function loadEditableScenes() {
           <img src="${imagePath}" alt="${scene.title}" class="scene-card-image" />
           <div class="scene-card-body">
             <h3 class="scene-card-title">${scene.title}</h3>
-            <p class="scene-card-description">${scene.description || ''}</p>
+            <p class="scene-card-description">${shortDescription}</p>
             <button onclick="editScene('${scene._id}')">Edit</button>
             <button onclick="deleteScene('${scene._id}')">Delete</button>
           </div>
@@ -177,6 +190,7 @@ function loadEditableScenes() {
     })
     .catch(err => console.error('Error loading editable scenes:', err));
 }
+
 
 function editScene(id) {
   fetch(`/api/admin/scenes/${id}`, {

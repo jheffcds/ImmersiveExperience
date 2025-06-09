@@ -33,6 +33,7 @@ router.post('/', authenticateToken, adminAuth, async (req, res) => {
         sceneId,
         title: req.body.title,
         description: req.body.description,
+        story: req.body.story,
         link: req.body.link,
         price,
         isAvailable,
@@ -100,6 +101,7 @@ router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
 
       scene.images = scene.images.filter(img => !removedImages.includes(img));
       scene.title = req.body.title || scene.title;
+      scene.story = req.body.story || scene.story;
       scene.description = req.body.description || scene.description;
       scene.link = req.body.link || scene.link;
       scene.price = price;
@@ -142,6 +144,7 @@ router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
       scene.images = [...scene.images, ...newImagePaths];
       scene.title = req.body.title || scene.title;
       scene.description = req.body.description || scene.description;
+      scene.story = req.body.story || scene.story;
       scene.link = req.body.link || scene.link;
       scene.price = price;
       scene.isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;

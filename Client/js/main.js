@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ================================
-  // Dynamic Scene Card Loading
+  // Dynamic Scene Card Loading (projects.html)
   // ================================
   const projectCardsContainer = document.getElementById('projectCardsContainer');
 
@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const card = document.createElement('div');
           card.className = 'project-card';
 
-          // Corrected image path (served via /scenes route)
           const imagePath = scene.images?.[0] || '';
           const imageUrl = imagePath
             ? `/scenes/${imagePath.split('/').slice(1).join('/')}`
@@ -97,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
           projectCardsContainer.appendChild(card);
         });
 
-        // Re-bind View buttons after cards are added
         const viewButtons = document.querySelectorAll('.view-scene');
         viewButtons.forEach(button => {
           button.addEventListener('click', () => {
@@ -110,5 +108,55 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error loading scenes:', err);
         projectCardsContainer.innerHTML = '<p>Failed to load scenes. Please try again later.</p>';
       });
+  }
+
+  // ================================
+  // Scene Viewer Page (scenes.html)
+  // ================================
+  if (window.location.pathname.endsWith('scenes.html')) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sceneId = urlParams.get('id');
+
+    if (sceneId) {
+      fetch(`/api/scenes/${sceneId}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Scene not found');
+          return response.json();
+        })
+        .then(scene => {
+          // Update scene text details
+          const detailsContainer = document.getElementById('scene-details');
+          if (detailsContainer) {
+            const [storyEl, descEl] = detailsContainer.querySelectorAll('p');
+            detailsContainer.querySelector('h1').textContent = scene.title || 'Untitled Scene';
+            storyEl.innerHTML = `<strong>Story:</strong> ${scene.story || 'No story available.'}`;
+            descEl.innerHTML = `<strong>Description:</strong> ${scene.description || 'No description available.'}`;
+          }
+
+          // Load images
+          const gallery = document.querySelector('.gallery');
+          if (gallery) {
+            gallery.innerHTML = ''; // Clear old images
+            if (Array.isArray(scene.images) && scene.images.length > 0) {
+              scene.images.forEach(imagePath => {
+                const imageUrl = `/scenes/${imagePath.split('/').slice(1).join('/')}`;
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = `${scene.title || 'Scene'} Image`;
+                gallery.appendChild(img);
+              });
+            } else {
+              gallery.innerHTML = '<p>No images available for this scene.</p>';
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error loading scene:', error);
+          const details = document.getElementById('scene-details');
+          const images = document.getElementById('scene-images');
+          if (details) details.innerHTML = '<p>Scene not found.</p>';
+          if (images) images.innerHTML = '';
+        });
+    }
   }
 });

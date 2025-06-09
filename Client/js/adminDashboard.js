@@ -25,6 +25,9 @@ function showSection(section) {
         <h2>Add New Scene</h2>
         <form id="addSceneForm" enctype="multipart/form-data">
           <input type="text" id="title" placeholder="Title" required />
+          <label for="story">Story</label>
+          <textarea id="story" name="story" rows="4" required></textarea>
+
           <textarea id="description" placeholder="Description"></textarea>
           <input type="text" id="link" placeholder="Scene URL" />
           <input type="number" id="price" placeholder="Price" step="0.01" min="0" />
@@ -85,6 +88,7 @@ function submitScene(e) {
 
   formData.append('title', document.getElementById('title').value);
   formData.append('description', document.getElementById('description').value);
+  formData.append('story', document.getElementById('story').value);
   formData.append('link', document.getElementById('link').value);
   formData.append('price', document.getElementById('price').value);
   formData.append('isAvailable', document.getElementById('isAvailable').checked);
@@ -187,6 +191,7 @@ function editScene(id) {
       document.getElementById('editSceneId').value = scene._id;
       document.getElementById('editTitle').value = scene.title;
       document.getElementById('editDescription').value = scene.description || '';
+      document.getElementById('editStory').value = scene.story || '';
       document.getElementById('editLink').value = scene.link || '';
       document.getElementById('editPrice').value = scene.price || '';
       document.getElementById('editAvailable').checked = scene.isAvailable || false;
@@ -264,6 +269,7 @@ function submitEditScene(e) {
 
   formData.append('title', document.getElementById('editTitle').value);
   formData.append('description', document.getElementById('editDescription').value);
+  formData.append('story', document.getElementById('editStory').value);
   formData.append('link', document.getElementById('editLink').value);
   formData.append('price', document.getElementById('editPrice').value);
   formData.append('isAvailable', document.getElementById('editAvailable').checked);

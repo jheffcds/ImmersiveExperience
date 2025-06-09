@@ -56,6 +56,7 @@ router.post('/', authenticateToken, adminAuth, (req, res) => {
         sceneId,
         title: req.body.title,
         description: req.body.description,
+        story: req.body.story,
         link: req.body.link,
         price,
         isAvailable,

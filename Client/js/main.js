@@ -1,5 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // ================================
+  // Auth-Based Navbar Rendering
+  // ================================
+  const token = localStorage.getItem('token');
+  const userName = localStorage.getItem('userName');
+  const userPicture = localStorage.getItem('userPicture');
+  const navLinks = document.getElementById('navLinks');
+
+  if (navLinks) {
+    navLinks.innerHTML = ''; // Clear current nav links if any
+
+    // Common nav items
+    const commonLinks = [
+      { href: 'index.html', label: 'Home' },
+      { href: 'projects.html', label: 'Projects' },
+      { href: 'about.html', label: 'About' }
+    ];
+
+    commonLinks.forEach(link => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${link.href}">${link.label}</a>`;
+      navLinks.appendChild(li);
+    });
+
+    if (token && userName) {
+      // If logged in, show Profile and Logout
+      const profileLi = document.createElement('li');
+      profileLi.innerHTML = `<a href="profile.html">Profile</a>`;
+      navLinks.appendChild(profileLi);
+
+      const logoutLi = document.createElement('li');
+      logoutLi.innerHTML = `<button id="logoutBtn" class="btn logout-btn">Logout</button>`;
+      navLinks.appendChild(logoutLi);
+    } else {
+      // Not logged in, show Sign In
+      const signInLi = document.createElement('li');
+      signInLi.innerHTML = `<a id="signInBtn" href="signin.html">Sign In</a>`;
+      navLinks.appendChild(signInLi);
+    }
+  }
+
+  // Attach Logout Logic (dynamic)
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'logoutBtn') {
+      localStorage.clear();
+      window.location.href = 'signin.html';
+    }
+  });
+
+  // ================================
   // Modal Logic
+  // ================================
   const openModalBtn = document.getElementById('openModal');
   const closeModalBtn = document.getElementById('closeModal');
   const modal = document.getElementById('projectModal');
@@ -17,7 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ================================
   // Unmute Button Logic
+  // ================================
   const unmuteBtn = document.getElementById('unmuteBtn');
   const introVideo = document.getElementById('introVideo');
 
@@ -34,7 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ================================
   // VR to Verity Logo Animation
+  // ================================
   const logo = document.getElementById('logoText');
   if (logo) {
     setTimeout(() => {
@@ -42,20 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
   }
 
+  // ================================
   // Hamburger Menu Toggle
+  // ================================
   const hamburger = document.getElementById('hamburger');
   if (hamburger) {
     hamburger.addEventListener('click', () => {
       document.getElementById('navLinks').classList.toggle('active');
-    });
-  }
-
-  // Logout Button Logic
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      localStorage.clear();
-      window.location.href = 'signin.html';
     });
   }
 
@@ -124,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
           return response.json();
         })
         .then(scene => {
-          // Update scene text details
           const detailsContainer = document.getElementById('scene-details');
           if (detailsContainer) {
             const [storyEl, descEl] = detailsContainer.querySelectorAll('p');
@@ -133,10 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
             descEl.innerHTML = `<strong>Description:</strong> ${scene.description || 'No description available.'}`;
           }
 
-          // Load images
           const gallery = document.querySelector('.gallery');
           if (gallery) {
-            gallery.innerHTML = ''; // Clear old images
+            gallery.innerHTML = '';
             if (Array.isArray(scene.images) && scene.images.length > 0) {
               scene.images.forEach(imagePath => {
                 const imageUrl = `/scenes/${imagePath.split('/').slice(1).join('/')}`;

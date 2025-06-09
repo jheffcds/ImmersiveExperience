@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (token && userName) {
       // If logged in, show Profile and Logout
       const profileLi = document.createElement('li');
-      profileLi.innerHTML = `<a href="profile.html">Profile</a>`;
+      profileLi.innerHTML = `<a href="dashboard.html">Profile</a>`;
       navLinks.appendChild(profileLi);
 
       const logoutLi = document.createElement('li');

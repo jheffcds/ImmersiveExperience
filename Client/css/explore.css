@@ -14,7 +14,17 @@
   font-size: 3rem;
   margin-bottom: 1rem;
 }
-
+.btn-how-it-works {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border: 1px solid rgb(255, 255, 255);
+    transition: background 0.3s ease;
+    position: absolute;
+    bottom: 20px;
+    left: 40%;
+}
 .hero p {
   font-size: 1.2rem;
   max-width: 700px;

@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
-      localStorage.clear(); // Remove all stored user data
-      window.location.href = 'signin.html'; // Redirect to login
+      localStorage.clear();
+      window.location.href = 'signin.html';
     });
   }
 
@@ -73,15 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(scenes => {
         if (!Array.isArray(scenes)) return;
 
-        projectCardsContainer.innerHTML = ''; // Clear any placeholders
+        projectCardsContainer.innerHTML = '';
 
         scenes.forEach(scene => {
           const card = document.createElement('div');
           card.className = 'project-card';
 
-          const imageUrl = scene.images?.[0]
-            ? `/uploads/${scene.images[0]}`
-            : 'assets/images/fallback.jpg'; // Fallback if no image
+          // Corrected image path (served via /scenes route)
+          const imagePath = scene.images?.[0] || '';
+          const imageUrl = imagePath
+            ? `/scenes/${imagePath.split('/').slice(1).join('/')}`
+            : 'assets/images/fallback.jpg';
 
           card.innerHTML = `
             <img src="${imageUrl}" alt="${scene.title || 'Scene'}" />
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
           projectCardsContainer.appendChild(card);
         });
 
-        // Re-bind View buttons after insertion
+        // Re-bind View buttons after cards are added
         const viewButtons = document.querySelectorAll('.view-scene');
         viewButtons.forEach(button => {
           button.addEventListener('click', () => {

@@ -24,16 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (token && userName) {
-      // If logged in, show Profile and Logout
+      const userRole = localStorage.getItem('userRole');
+      const isAdmin = userRole === 'admin';
+
       const profileLi = document.createElement('li');
-      profileLi.innerHTML = `<a href="profile.html">Profile</a>`;
+      profileLi.innerHTML = `<a href="${isAdmin ? 'adminDashboard.html' : 'dashboard.html'}">Profile</a>`;
       navLinks.appendChild(profileLi);
 
       const logoutLi = document.createElement('li');
       logoutLi.innerHTML = `<button id="logoutBtn" class="btn logout-btn">Logout</button>`;
       navLinks.appendChild(logoutLi);
     } else {
-      // Not logged in, show Sign In
       const signInLi = document.createElement('li');
       signInLi.innerHTML = `<a id="signInBtn" href="signin.html">Sign In</a>`;
       navLinks.appendChild(signInLi);

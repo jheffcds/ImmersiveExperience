@@ -217,7 +217,10 @@ function editScene(id) {
     .catch(err => alert('Failed to load scene: ' + err.message));
 }
 function removeImage(sceneId, imagePath) {
-  if (!confirm('Delete this image from the gallery?')) return;
+  if (!confirm('Delete this image from the gallery?')) {
+    console.log('Image deletion cancelled by user.');
+    return; // stop everything if cancelled
+  }
 
   fetch(`/api/admin/scenes/${sceneId}/images`, {
     method: 'DELETE',
@@ -227,13 +230,22 @@ function removeImage(sceneId, imagePath) {
     },
     body: JSON.stringify({ image: imagePath })
   })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`Server responded with ${res.status}`);
+      }
+      return res.json();
+    })
     .then(() => {
       alert('Image deleted');
       editScene(sceneId); // reload modal content
     })
-    .catch(err => alert('Error deleting image: ' + err.message));
+    .catch(err => {
+      console.error('Delete failed:', err);
+      alert('Error deleting image: ' + err.message);
+    });
 }
+
 
 
 function openEditModal() {

@@ -15,25 +15,40 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       scenes.forEach(scene => {
-        const card = document.createElement('div');
-        card.className = 'project-card';
+    const card = document.createElement('div');
+    card.className = 'project-card';
 
-        const imagePath = scene.images?.[0] || '';
-        const imageUrl = imagePath
-          ? `/scenes/${imagePath.split('/').slice(1).join('/')}`
-          : 'assets/images/fallback.jpg';
+    const price = parseFloat(scene.price) || 0;
+    if (price === 0) {
+        card.classList.add('free');
+    } else {
+        card.classList.add('paid');
+    }
 
-        card.innerHTML = `
-          <img src="${imageUrl}" alt="${scene.title || 'Scene'}" />
-          <div class="card-content">
-            <h3>${scene.title || 'Untitled Scene'}</h3>
-            <p>${scene.description || 'No description available.'}</p>
-            <button class="card-btn view-scene" data-id="${scene._id}">View</button>
-          </div>
-        `;
+    const imagePath = scene.images?.[0] || '';
+    const imageUrl = imagePath
+        ? `/scenes/${imagePath.split('/').slice(1).join('/')}`
+        : 'assets/images/fallback.jpg';
 
-        sceneContainer.appendChild(card);
-      });
+    const fullDescription = scene.description || 'No description available.';
+    const shortDescription =
+        fullDescription.length > 50
+        ? fullDescription.slice(0, 50) + '...'
+        : fullDescription;
+
+    card.innerHTML = `
+        <img src="${imageUrl}" alt="${scene.title || 'Scene'}" />
+        <div class="card-content">
+        <h3>${scene.title || 'Untitled Scene'}</h3>
+        <p>${shortDescription}</p>
+        <p><strong>Price:</strong> ${price === 0 ? 'Free' : `$${price.toFixed(2)}`}</p>
+        <button class="card-btn view-scene" data-id="${scene._id}">View</button>
+        </div>
+    `;
+
+    sceneContainer.appendChild(card);
+    });
+
 
       document.querySelectorAll('.view-scene').forEach(button => {
         button.addEventListener('click', () => {

@@ -470,7 +470,7 @@ a {
 
     @media (max-width: 768px) {
       .scene-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
       }
 
       .scene-left, .scene-right {

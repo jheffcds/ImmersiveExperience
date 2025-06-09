@@ -64,13 +64,23 @@
 
 .project-card {
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+  border: 5px solid #ddd;
+  border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   width: 300px;
   overflow: hidden;
   transition: transform 0.3s ease;
+  transition: border-color 0.3s ease;
 }
+
+.project-card.free {
+  border-color: green;
+}
+
+.project-card.paid {
+  border-color: gold;
+}
+
 
 .project-card:hover {
   transform: translateY(-5px);

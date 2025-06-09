@@ -23,7 +23,7 @@
     transition: background 0.3s ease;
     position: absolute;
     bottom: 20px;
-    left: 40%;
+    left: 45%;
 }
 .hero p {
   font-size: 1.2rem;
@@ -59,7 +59,7 @@
   gap: 30px;
   justify-content: center;
   padding: 60px 20px;
-  background-color: #4d4b4b;
+  background-color: rgba(238, 228, 192, 0.97);
 }
 
 .project-card {

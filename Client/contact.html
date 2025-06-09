@@ -29,7 +29,7 @@
 
   <main class="contact-container">
     <h1>Contact Us</h1>
-    <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <form class="contact-form" action="https://formspree.io/f/xqknyprq" method="POST">
       <label for="name">Full Name</label>
       <input type="text" name="name" id="name" required />
 
@@ -43,6 +43,7 @@
       <textarea name="message" id="message" rows="6" required></textarea>
 
       <button type="submit" class="btn">Send Message</button>
+      <p id="formResponse" style="display: none; color: green; margin-top: 1rem;">Thank you! Your message was sent.</p>
     </form>
   </main>
 
@@ -58,5 +59,29 @@
     </div>
   </footer>
 <script src="js/main.js"></script>
+<script>
+  const form = document.getElementById('contactForm');
+  const response = document.getElementById('formResponse');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        form.reset();
+        form.querySelector('button').style.display = 'none';
+        document.getElementById('formResponse').style.display = 'block';
+      } else {
+        alert('Something went wrong. Please try again later.');
+      }
+    });
+  });
+</script>
+
 </body>
 </html>

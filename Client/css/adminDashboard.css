@@ -180,7 +180,7 @@
   background-color: #1e1e2f;
   padding: 2rem 1rem;
   border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 20px rgb(249, 249, 249);
 }
 
 .admin-avatar {

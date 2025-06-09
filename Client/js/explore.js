@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fullDescription = scene.description || 'No description available.';
     const shortDescription =
-        fullDescription.length > 40
-        ? fullDescription.slice(0, 40) + '...'
+        fullDescription.length > 100
+        ? fullDescription.slice(0, 100) + '...'
         : fullDescription;
 
     card.innerHTML = `

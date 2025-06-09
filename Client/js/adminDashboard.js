@@ -25,9 +25,7 @@ function showSection(section) {
         <h2>Add New Scene</h2>
         <form id="addSceneForm" enctype="multipart/form-data">
           <input type="text" id="title" placeholder="Title" required />
-          <label for="story">Story</label>
-          <textarea id="story" name="story" rows="4" required></textarea>
-
+          <textarea id="story" placeholder="Story"></textarea>
           <textarea id="description" placeholder="Description"></textarea>
           <input type="text" id="link" placeholder="Scene URL" />
           <input type="number" id="price" placeholder="Price" step="0.01" min="0" />

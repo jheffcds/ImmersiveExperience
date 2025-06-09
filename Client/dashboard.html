@@ -3,74 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Verity - Dashboard</title>
+  <title>Verity - User Dashboard</title>
   <link rel="icon" href="assets/images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/styles.css" />
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
+  <link rel="stylesheet" href="css/adminDashboard.css" /> <!-- Reuse admin styles -->
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="logo-container">
-      <a href="index.html">
-        <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
-      </a>
-      <h1 class="logo-text" id="logoText">VR</h1>
-    </div>
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="logo-container">
+    <a href="index.html">
+      <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
+    </a>
+    <h1 class="logo-text" id="logoText">VR</h1>
+  </div>
 
-    <button class="hamburger" id="hamburger">&#9776;</button>
+  <button class="hamburger" id="hamburger">&#9776;</button>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="explore.html">Explore</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><button id="logoutBtn" class="btn logout-btn">Logout</button></li>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="explore.html">Explore</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><button id="logoutBtn" class="btn logout-btn">Logout</button></li>
+  </ul>
+</nav>
+
+<!-- User Dashboard Layout -->
+<main class="dashboard-container">
+  <aside class="sidebar">
+    <img src="uploads/profile/default.png" alt="User Profile" id="userProfileImage" class="admin-avatar" />
+    <h2 id="userName">User</h2>
+    <ul class="admin-nav">
+      <li><button class="sidebar-btn" onclick="showUserSection('featured')">🌟 Featured Scenes</button></li>
+      <li><button class="sidebar-btn" onclick="showUserSection('favourites')">❤️ My Favourites</button></li>
+      <li><button class="sidebar-btn" onclick="showUserSection('purchased')">🛒 Bought Scenes</button></li>
+      <li><a href="profile-settings.html" class="sidebar-btn">⚙️ Settings</a></li>
     </ul>
-  </nav>
+  </aside>
 
-  <!-- Main Dashboard Layout -->
-  <main class="dashboard-container">
-    <aside class="sidebar">
-      <img src="uploads/profile/default.png" alt="User Profile" id="userProfileImage" />
-      <h2 id="userName">John Doe</h2>
-      <a href="profile-settings.html">Settings</a>
-    </aside>
-    <section class="content">
-      <div class="scene-section">
-        <h3>Preferred Scenes</h3>
-        <div class="scene-list" id="preferredScenes">
-          <!-- Preferred scenes will go here -->
-          
-        </div>
-      </div>
+  <section class="content" id="userContent">
+    <!-- Dynamic content rendered here -->
+  </section>
+</main>
 
-      <div class="scene-section">
-        <h3>Purchased Items</h3>
-        <div class="scene-list" id="purchasedScenes">
-          <!-- Purchased scenes will go here -->
-          <div class="scene-item">
-            <img src="assets/images/scene2.jpg" alt="Scene">
-            <p>Desert Mirage</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-content">
-      <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
-      <p>Contact: <a href="mailto:jheffersoncastrodossantos@gmail.com">jheffersoncastrodossantos@gmail.com</a></p>
-      <div class="social-links">
-        <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
-        <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a>
-        <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
-      </div>
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
+    <p>Contact: <a href="mailto:jheffersoncastrodossantos@gmail.com">jheffersoncastrodossantos@gmail.com</a></p>
+    <div class="social-links">
+      <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
+      <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
     </div>
-  </footer>
+  </div>
+</footer>
+
 <script src="js/main.js"></script>
 <script src="js/dashboard.js"></script>
 

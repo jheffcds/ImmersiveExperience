@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Common nav items
     const commonLinks = [
       { href: 'index.html', label: 'Home' },
-      { href: 'projects.html', label: 'Projects' },
+      { href: 'explore.html', label: 'Explore' },
       { href: 'about.html', label: 'About' }
     ];
 
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ================================
-  // Dynamic Scene Card Loading (projects.html)
+  // Dynamic Scene Card Loading (explore.html)
   // ================================
   const projectCardsContainer = document.getElementById('projectCardsContainer');
 

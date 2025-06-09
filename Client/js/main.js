@@ -25,8 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (token && userName) {
       // If logged in, show Profile and Logout
+      const userRole = localStorage.getItem('userRole');
+      const isAdmin = userRole === 'admin';
+
       const profileLi = document.createElement('li');
-      profileLi.innerHTML = `<a href="dashboard.html">Profile</a>`;
+      profileLi.innerHTML = `<a href="${isAdmin ? 'adminDashboard.html' : 'dashboard.html'}">Profile</a>`;
       navLinks.appendChild(profileLi);
 
       const logoutLi = document.createElement('li');

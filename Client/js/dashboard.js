@@ -43,20 +43,22 @@ function loadScenes(apiUrl, containerId) {
     .then(data => {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      if (!data.length) {
-        container.innerHTML = '<p>No scenes found.</p>';
+      const featured = data.filter(scene => scene.featured);
+
+      if (featured.length === 0) {
+        container.innerHTML = '<p>No featured scenes available.</p>';
         return;
       }
 
-      data.forEach(scene => {
+      featured.forEach(scene => {
         const imagePath = scene.images?.[0] ? `/${scene.images[0]}` : 'assets/images/placeholder.png';
         const card = document.createElement('div');
-        card.classList.add('scene-card');
+        card.className = 'scene-card';
         card.innerHTML = `
-          <img src="${imagePath}" alt="${scene.title}" class="scene-card-image" />
+          <img src="${imagePath}" alt="${scene.title}">
           <div class="scene-card-body">
-            <h3 class="scene-card-title">${scene.title}</h3>
-            <p class="scene-card-description">${(scene.description || '').slice(0, 100)}...</p>
+            <h3>${scene.title}</h3>
+            <p>${scene.description?.substring(0, 100) || ''}...</p>
           </div>
         `;
         container.appendChild(card);

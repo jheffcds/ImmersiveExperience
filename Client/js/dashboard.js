@@ -1,16 +1,11 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    window.location.href = '/signin.html';
-    return;
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  const name = localStorage.getItem('userName') || 'User';
+  const picture = localStorage.getItem('userPicture') || 'uploads/profile/default.png';
 
-  const cachedName = localStorage.getItem('userName') || 'User';
-  const cachedPicture = localStorage.getItem('userPicture') || 'uploads/profile/default.png';
-  document.getElementById('userName').textContent = cachedName;
-  document.getElementById('userProfileImage').src = cachedPicture;
+  document.getElementById('userName').textContent = name;
+  document.getElementById('userProfileImage').src = picture;
 
-  showUserSection('featured');
+  showUserSection('featured'); // default view
 });
 
 function showUserSection(section) {
@@ -19,29 +14,30 @@ function showUserSection(section) {
 
   switch (section) {
     case 'featured':
-      content.innerHTML = `<h2>Featured Scenes</h2><div id="featuredScenes" class="scene-card-container">Loading...</div>`;
-      loadScenes('/api/scenes/featured', 'featuredScenes');
+      content.innerHTML = `<h2>🌟 Featured Scenes</h2><div id="featuredContainer" class="scene-card-container">Loading...</div>`;
+      loadFeaturedScenes();
       break;
+
     case 'favourites':
-      content.innerHTML = `<h2>My Favourite Scenes</h2><div id="favouriteScenes" class="scene-card-container">Loading...</div>`;
-      loadScenes('/api/users/favourites', 'favouriteScenes');
+      content.innerHTML = `<h2>❤️ My Favourite Scenes</h2><div class="scene-card-container">Coming soon...</div>`;
       break;
+
     case 'purchased':
-      content.innerHTML = `<h2>Bought Scenes</h2><div id="purchasedScenes" class="scene-card-container">Loading...</div>`;
-      loadScenes('/api/users/purchases', 'purchasedScenes');
+      content.innerHTML = `<h2>🛒 Purchased Scenes</h2><div class="scene-card-container">Coming soon...</div>`;
       break;
   }
 }
 
-function loadScenes(apiUrl, containerId) {
-  fetch(apiUrl, {
+function loadFeaturedScenes() {
+  const container = document.getElementById('featuredContainer');
+
+  fetch('/api/scenes', {
     headers: {
       'Authorization': 'Bearer ' + localStorage.getItem('token')
     }
   })
     .then(res => res.json())
     .then(data => {
-      const container = document.getElementById(containerId);
       container.innerHTML = '';
       const featured = data.filter(scene => scene.featured);
 
@@ -65,7 +61,7 @@ function loadScenes(apiUrl, containerId) {
       });
     })
     .catch(err => {
-      console.error('Failed to load scenes:', err);
-      document.getElementById(containerId).innerHTML = '<p>Error loading scenes.</p>';
+      container.innerHTML = '<p>Error loading scenes.</p>';
+      console.error(err);
     });
 }

@@ -7,20 +7,48 @@
   <link rel="icon" href="assets/images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/adminDashboard.css" /> <!-- Reuse admin styles -->
+
+  <style>
+    .scene-card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .scene-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 250px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .scene-card img {
+      width: 100%;
+      height: auto;
+    }
+
+    .scene-card-body {
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- Navigation -->
 <nav class="navbar">
   <div class="logo-container">
     <a href="index.html">
       <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
     </a>
-    <h1 class="logo-text" id="logoText">VR</h1>
+    <h1 class="logo-text">VR</h1>
   </div>
-
   <button class="hamburger" id="hamburger">&#9776;</button>
-
   <ul class="nav-links" id="navLinks">
     <li><a href="explore.html">Explore</a></li>
     <li><a href="about.html">About</a></li>
@@ -29,10 +57,9 @@
   </ul>
 </nav>
 
-<!-- User Dashboard Layout -->
 <main class="dashboard-container">
   <aside class="sidebar">
-    <img src="uploads/profile/default.png" alt="User Profile" id="userProfileImage" class="admin-avatar" />
+    <img src="uploads/profile/default.png" alt="User Profile" id="userProfileImage" />
     <h2 id="userName">User</h2>
     <ul class="admin-nav">
       <li><button class="sidebar-btn" onclick="showUserSection('featured')">🌟 Featured Scenes</button></li>
@@ -43,20 +70,14 @@
   </aside>
 
   <section class="content" id="userContent">
-    <!-- Dynamic content rendered here -->
+    <!-- Dynamic content loaded via JS -->
   </section>
 </main>
 
-<!-- Footer -->
 <footer class="site-footer">
   <div class="footer-content">
     <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
     <p>Contact: <a href="mailto:jheffersoncastrodossantos@gmail.com">jheffersoncastrodossantos@gmail.com</a></p>
-    <div class="social-links">
-      <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
-      <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a>
-      <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
-    </div>
   </div>
 </footer>
 

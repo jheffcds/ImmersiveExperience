@@ -175,3 +175,33 @@ router.delete('/:id', authenticateToken, adminAuth, async (req, res) => {
 });
 
 module.exports = router;
+// =================== DELETE: One image from a scene ===================
+router.delete('/:id/images', authenticateToken, adminAuth, async (req, res) => {
+  try {
+    const scene = await Scene.findById(req.params.id);
+    if (!scene) return res.status(404).json({ message: 'Scene not found' });
+
+    const { image } = req.body;
+    if (!image) return res.status(400).json({ message: 'No image specified' });
+
+    // Protect against path traversal attacks
+    const normalizedPath = path.normalize(image);
+    if (!normalizedPath.startsWith('scenes/')) {
+      return res.status(400).json({ message: 'Invalid image path' });
+    }
+
+    const imagePath = path.join(__dirname, '..', normalizedPath);
+    fs.unlink(imagePath, err => {
+      if (err) console.error(`Failed to delete image: ${imagePath}`, err);
+    });
+
+    // Remove the image path from the scene's image array
+    scene.images = scene.images.filter(img => img !== image);
+    await scene.save();
+
+    res.json({ message: 'Image deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting image', error: err.message });
+  }
+});
+

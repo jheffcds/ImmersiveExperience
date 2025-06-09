@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('userName', data.name || 'User');
       localStorage.setItem('userPicture', data.picture || 'uploads/profile/default.png');
+      localStorage.setItem('userRole', data.role);
 
       if (data.role === 'admin') {
         window.location.href = '/adminDashboard.html';

@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     localStorage.setItem('userName', name);
     localStorage.setItem('userPicture', profilePicture);
+    localStorage.setItem('userRole', user.role);
 
     document.getElementById('userName').textContent = name || 'John Doe';
     document.getElementById('userProfileImage').src = profilePicture || 'uploads/profile/default.png';

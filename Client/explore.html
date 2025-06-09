@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verity - Immersive Experiences</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="page-container">
+    <header>
+      <nav class="navbar">
+        <div class="logo-container">
+          <a href="index.html">
+            <img src="assets/images/logo.png" alt="Logo" class="logo-icon" />
+          </a>
+          <h1 class="logo-text" id="logoText">VR</h1>
+        </div>
+        <button class="hamburger" id="hamburger">&#9776;</button>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="explore.html">Explore</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="signin.html">Sign In</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Explore Immersive Art in VR</h1>
+      <p>Step into a world where creativity meets technology.</p>
+      <a href="#how-it-works" class="btn">How It Works</a>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+      <h2>How Does It Work?</h2>
+      <div class="steps">
+        <div class="step">
+          <h3>1. Log In</h3>
+          <p>Create an account or log in to access the VR experiences.</p>
+        </div>
+        <div class="step">
+          <h3>2. Explore Scenes</h3>
+          <p>Browse available immersive scenes and discover the stories behind them.</p>
+        </div>
+        <div class="step">
+          <h3>3. View & Read</h3>
+          <p>Click "View Scene" to see the title, story, and scene details.</p>
+        </div>
+        <div class="step">
+          <h3>4. Experience in VR</h3>
+          <p>Click "Experience", put on your VR headset, open the app, and log in using your web credentials.</p>
+        </div>
+        <div class="step">
+          <h3>5. Purchase or Save</h3>
+          <p>You can purchase featured scenes or add them to your favorites list.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scene Gallery Section -->
+    <section class="scene-gallery">
+      <h2>Scenes Available to Explore</h2>
+      <div id="exploreSceneCards" class="card-grid">
+        <!-- Scene cards will be injected via JS -->
+      </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section class="faq">
+      <h2>FAQs</h2>
+      <ul>
+        <li><strong>What headset is compatible?</strong> Any WebXR-enabled VR headset like Oculus Quest.</li>
+        <li><strong>Do I need an account?</strong> Yes, to access VR scenes and sync with the app.</li>
+        <li><strong>Can I preview scenes without VR?</strong> Yes, in-browser previews are available.</li>
+        <li><strong>Is there a mobile app?</strong> Yes, download it from the official store and log in.</li>
+      </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
+        <p>Contact: <a href="mailto:jheffersoncastrodossantos@gmail.com">jheffersoncastrodossantos@gmail.com</a></p>
+        <div class="social-links">
+          <a href="https://instagram.com/yourprofile" target="_blank">Instagram</a>
+          <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a>
+          <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/explore.js"></script>
+  </div>
+</body>
+</html>

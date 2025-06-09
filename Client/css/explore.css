@@ -1,0 +1,129 @@
+/* ============================= */
+/* Explore Page Styles */
+/* ============================= */
+
+.hero {
+  background: url('../assets/images/starry-night-2.jpg') no-repeat center center/cover;
+  padding: 100px 20px;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* How it works section */
+.how-it-works {
+  background-color: #000000;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.how-it-works h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.how-it-works ol {
+  list-style-position: inside;
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Explore Scene Cards */
+#exploreSceneCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  padding: 60px 20px;
+  background-color: #4d4b4b;
+}
+
+.project-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  width: 300px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 16px;
+}
+
+.card-content h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.card-content p {
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+}
+
+.card-btn {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Optional: FAQ section */
+.faq-section {
+  padding: 50px 20px;
+  background-color: #758ca4;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faq-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+}
+
+.faq-item h4 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.faq-item p {
+  font-size: 1rem;
+  line-height: 1.5;
+}

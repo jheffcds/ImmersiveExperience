@@ -275,18 +275,11 @@ a {
     margin: 1rem 0;
   }
 
-  .project-cards {
-    flex-direction: column;
-    align-items: center;
-  }
 
   .modal-content {
     padding: 1rem;
   }
 
-  .project-card {
-    max-width: 90%;
-  }
 }
 /* Blinking border animation */
 @keyframes blinkBorder {

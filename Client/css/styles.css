@@ -156,8 +156,8 @@ a {
   z-index: 1;
 }
 .btn:hover {
-  background: rgba(198, 171, 13, 0.815);
-  color: #00ff00;
+  background: rgba(251, 251, 251, 0.998);
+  color: #040404;
   box-shadow: 0 4px 20px rgba(0, 255, 0, 0.5);
 }
 

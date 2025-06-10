@@ -3,11 +3,15 @@
 /* ============================= */
 
 .hero {
-  background: url('../assets/images/vr-scene.png') no-repeat center center/cover;
-  padding: 350px 20px;
-  color: #fff;
-  text-align: center;
-  position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    background: url('../assets/images/vr-scene.png') no-repeat center center/cover;
+    padding: 350px 20px;
+    color: #fff;
+    text-align: center;
+    position: relative;
 }
 
 .hero h1 {

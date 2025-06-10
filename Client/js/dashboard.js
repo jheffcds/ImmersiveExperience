@@ -14,7 +14,7 @@ function showUserSection(section) {
 
   switch (section) {
     case 'featured':
-      content.innerHTML = `<h2>🌟 Featured Scenes</h2><div id="featuredContainer" class="scene-card-container">Loading...</div>`;
+      content.innerHTML = `<h2>🌟 Featured Scenes</h2><div id="exploreSceneCards" class="scene-card-container">Loading...</div>`;
       loadFeaturedScenes();
       break;
 
@@ -29,7 +29,7 @@ function showUserSection(section) {
 }
 
 function loadFeaturedScenes() {
-  const container = document.getElementById('featuredContainer');
+  const container = document.getElementById('exploreSceneCards');
 
   fetch('/api/scenes', {
     headers: {
@@ -47,16 +47,32 @@ function loadFeaturedScenes() {
       }
 
       featured.forEach(scene => {
-        const imagePath = scene.images?.[0] ? `/${scene.images[0]}` : 'assets/images/placeholder.png';
+        const imagePath = scene.images?.[0] || '';
+        const imageUrl = imagePath
+        ? `/scenes/${imagePath.split('/').slice(1).join('/')}`
+        : 'assets/images/fallback.jpg';
         const card = document.createElement('div');
-        card.className = 'scene-card';
+        card.className = 'project-card';
+        const price = parseFloat(scene.price) || 0;
+        if (price === 0) {
+          card.classList.add('free');
+        } else {
+          card.classList.add('paid');
+        }
+        const fullDescription = scene.description || 'No description available.';
+        const shortDescription =
+        fullDescription.length > 100
+        ? fullDescription.slice(0, 100) + '...'
+        : fullDescription;
         card.innerHTML = `
-          <img src="${imagePath}" alt="${scene.title}">
-          <div class="scene-card-body">
-            <h3>${scene.title}</h3>
-            <p>${scene.description?.substring(0, 100) || ''}...</p>
-          </div>
-        `;
+        <img src="${imageUrl}" alt="${scene.title || 'Scene'}" />
+        <div class="card-content">
+        <h3>${scene.title || 'Untitled Scene'}</h3>
+        <p>${shortDescription}</p>
+        <p><strong>Price:</strong> ${price === 0 ? 'Free' : `$${price.toFixed(2)}`}</p>
+        <button class="btn view-scene" data-id="${scene._id}">View</button>
+        </div>
+    `;
         container.appendChild(card);
       });
     })

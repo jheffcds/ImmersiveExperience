@@ -59,7 +59,7 @@
   gap: 30px;
   justify-content: center;
   padding: 60px 20px;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: rgba(15, 23, 42, 0.95); /* Slate dark */
   color: #fff;
 }
 

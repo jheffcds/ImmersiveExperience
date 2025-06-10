@@ -974,3 +974,33 @@ a {
 .contact-btn:hover {
   background-color: #0056b3;
 }
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .sidebar {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar h2 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar a {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+  }
+}

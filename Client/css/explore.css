@@ -1,3 +1,67 @@
+/* ============================= */
+/* Explore Page Styles */
+/* ============================= */
+
+.hero {
+  background: url('../assets/images/vr-scene.png') no-repeat center center/cover;
+  padding: 350px 20px;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.btn-how-it-works {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border: 1px solid rgb(255, 255, 255);
+    transition: background 0.3s ease;
+    position: absolute;
+    bottom: 20px;
+    left: 45%;
+}
+.hero p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* How it works section */
+.how-it-works {
+  background-color: #000000;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.how-it-works h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.how-it-works ol {
+  list-style-position: inside;
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Explore Scene Cards */
+#exploreSceneCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  padding: 60px 20px;
+  background-color: rgba(238, 228, 192, 0.97);
+}
+
 .project-card {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 16px;
@@ -62,4 +126,33 @@
 
 .card-btn:hover {
   background-color: rgba(37, 99, 235, 0.95);
+}
+
+
+/* Optional: FAQ section */
+.faq-section {
+  padding: 50px 20px;
+  background-color: #758ca4;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faq-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+}
+
+.faq-item h4 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.faq-item p {
+  font-size: 1rem;
+  line-height: 1.5;
 }

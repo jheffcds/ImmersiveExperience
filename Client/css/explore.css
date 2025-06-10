@@ -59,9 +59,10 @@
   gap: 30px;
   justify-content: center;
   padding: 60px 20px;
-  background: rgba(15, 23, 42, 0.95); /* Slate dark */
-  color: #fff;
+  background: linear-gradient(to right, #f2f3f5, #e3e5e8);
+  color: #333;
 }
+
 
 .project-card {
   background: rgba(255, 255, 255, 0.15);

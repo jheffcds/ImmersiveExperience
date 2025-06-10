@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         scenes.forEach(scene => {
           const card = document.createElement('div');
-          card.className = 'project-cards';
+          card.className = 'project-card';
 
           const imagePath = scene.images?.[0] || '';
           const imageUrl = imagePath

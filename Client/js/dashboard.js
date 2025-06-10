@@ -14,7 +14,7 @@ function showUserSection(section) {
 
   switch (section) {
     case 'featured':
-      content.innerHTML = `<h2>🌟 Featured Scenes</h2><div id="exploreSceneCards" class="scene-card-container">Loading...</div>`;
+      content.innerHTML = `<h2>🌟 Featured Scenes</h2><div id="exploreSceneCards">Loading...</div>`;
       loadFeaturedScenes();
       break;
 

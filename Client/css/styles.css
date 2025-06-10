@@ -801,7 +801,6 @@ a {
 }
 .dashboard-container {
       display: flex;
-      min-height: 80vh;
       padding: 2rem;
       gap: 2rem;
       padding-top: var(--navbar-height);

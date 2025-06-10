@@ -176,6 +176,9 @@
   border-radius: 8px;
 }
 .sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #1e1e2f;
   padding: 2rem 1rem;
   border-radius: 1rem;

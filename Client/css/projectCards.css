@@ -54,47 +54,47 @@
   width: 300px;
   border-radius: 16px;
   overflow: hidden;
-  position: relative;
-  background: rgba(255, 255, 255, 0.1); /* Frosted glass background */
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  background: rgba(255, 255, 255, 0.1); /* subtle translucent background */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* light border for glass effect */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Optional: Subtle animated ripple effect inside glass */
+/* Shine effect */
 .modal-project-cards::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.08), transparent 70%);
-  animation: liquidRipple 5s linear infinite;
-  z-index: 0;
-}
-
-/* Optional: Light reflection effect */
-.modal-project-cards::after {
-  content: '';
-  position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: -75%;
+  width: 50%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  transform: skewX(-20deg);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+  opacity: 0;
 }
 
-@keyframes liquidRipple {
+.modal-project-cards:hover::before {
+  animation: shine 1.5s;
+  opacity: 1;
+}
+
+@keyframes shine {
   0% {
-    transform: translate(0%, 0%) rotate(0deg);
+    left: -75%;
   }
   100% {
-    transform: translate(25%, 25%) rotate(360deg);
+    left: 125%;
   }
 }
 

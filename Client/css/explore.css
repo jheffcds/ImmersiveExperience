@@ -75,7 +75,8 @@
   line-height: 1.5;
 }
 .section-description {
-  font-size: 1.1rem;
-  color: #ccc;
-  margin-top: 10px;
+  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+    align-items: center;
 }

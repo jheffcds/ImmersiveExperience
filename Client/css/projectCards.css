@@ -54,49 +54,57 @@
   width: 300px;
   border-radius: 16px;
   overflow: hidden;
+  
+  /* Frosted glass blur */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  
+  /* Translucent white background for glass */
+  background: rgba(255, 255, 255, 0.1);
+  
+  /* Semi-transparent border for glass edge */
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  
+  /* Subtle shadow for depth */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  
+  /* Smooth transition */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
   position: relative;
-  background: rgba(255, 255, 255, 0.1); /* subtle translucent background */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* light border for glass effect */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
+  /* Optional: add a subtle animated highlight to mimic liquid reflection */
 }
 
-/* Shine effect */
 .modal-project-cards::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
   background: linear-gradient(
     120deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0.1) 100%
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 60%,
+    rgba(255, 255, 255, 0.15) 100%
   );
-  transform: skewX(-20deg);
+  transform: rotate(25deg);
+  animation: shimmer 3s infinite;
   pointer-events: none;
-  z-index: 2;
-  transition: opacity 0.3s ease;
-  opacity: 0;
+  border-radius: 16px;
+  mix-blend-mode: screen;
 }
 
-.modal-project-cards:hover::before {
-  animation: shine 1.5s;
-  opacity: 1;
-}
-
-@keyframes shine {
+@keyframes shimmer {
   0% {
-    left: -75%;
+    transform: translateX(-100%) rotate(25deg);
   }
   100% {
-    left: 125%;
+    transform: translateX(100%) rotate(25deg);
   }
 }
+
 
 .project-card {
   background: rgba(255, 255, 255, 0.15);

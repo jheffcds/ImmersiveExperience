@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ================================
   // Dynamic Scene Card Loading (explore.html)
   // ================================
-  const projectCardsContainer = document.getElementById('exploreSceneCards');
+  const projectCardsContainer = document.getElementsByClassName('projectCardsContainer');
 
   if (projectCardsContainer) {
     fetch('/api/scenes')

@@ -185,7 +185,7 @@ a {
     left: 125%;
   }
 }
-.btn {
+.btn:hover {
   animation: shine 1.5s;
 }
 

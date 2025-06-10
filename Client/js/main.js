@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       navLinks.appendChild(profileLi);
 
       const logoutLi = document.createElement('li');
-      logoutLi.innerHTML = `<button id="logoutBtn" class="btn logout-btn">Logout</button>`;
+      logoutLi.innerHTML = `<button id="logoutBtn" class="btn-secondary logout-btn">Logout</button>`;
       navLinks.appendChild(logoutLi);
     } else {
       const signInLi = document.createElement('li');

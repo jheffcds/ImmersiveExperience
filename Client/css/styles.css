@@ -442,7 +442,7 @@ a {
   overflow-x: hidden;
   overflow-y: hidden;
   padding: 2rem;
-  background-color: rgb(30 30 30);
+  background-color: rgb(255, 255, 255);
 }
 
 .gallery {

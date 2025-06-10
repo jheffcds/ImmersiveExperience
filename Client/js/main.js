@@ -68,4 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('navLinks').classList.toggle('active');
     });
   }
+  const contactBtn = document.getElementById('contactUsBtn');
+  if (contactBtn) {
+    contactBtn.addEventListener('click', () => {
+      window.location.href = 'contact.html';
+    });
+  }
 });

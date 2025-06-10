@@ -148,10 +148,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
   }
-  const contactBtn = document.getElementById('contactUsBtn');
-  if (contactBtn) {
-    contactBtn.addEventListener('click', () => {
-      window.location.href = 'contact.html';
-    });
-  }
+  
 });

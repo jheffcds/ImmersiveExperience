@@ -59,7 +59,7 @@
   gap: 30px;
   justify-content: center;
   padding: 60px 20px;
-  background: linear-gradient(to right, #f2f3f5, #e3e5e8);
+  background: url('../assets/images/colorful-bg-project-cards.png') no-repeat center center/cover;
   color: #333;
 }
 

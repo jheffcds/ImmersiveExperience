@@ -52,12 +52,12 @@ function showSection(section) {
       break;
 
     case 'viewScenes':
-      content.innerHTML = `<h2>All Scenes</h2><ul id="exploreSceneCards">Loading scenes...</ul>`;
+      content.innerHTML = `<h2>All Scenes</h2><div id="exploreSceneCards">Loading scenes...</div>`;
       loadScenes();
       break;
 
     case 'editScenes':
-      content.innerHTML = `<h2>Edit Scenes</h2><ul id="exploreSceneCards">Loading scenes for editing...</ul>`;
+      content.innerHTML = `<h2>Edit Scenes</h2><div id="exploreSceneCards">Loading scenes for editing...</div>`;
       loadEditableScenes();
       break;
   }

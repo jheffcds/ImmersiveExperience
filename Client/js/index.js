@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>${scene.title || 'Untitled Scene'}</h3>
             <p>${shortDescription}</p>
             <p><strong>Price:</strong> ${price === 0 ? 'Free' : `$${price.toFixed(2)}`}</p>
-            <button class="card-btn view-scene" data-id="${scene._id}">View</button>
+            <button class="btn view-scene" data-id="${scene._id}">View</button>
             </div>
             `;
 

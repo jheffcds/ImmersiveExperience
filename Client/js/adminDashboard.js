@@ -146,6 +146,7 @@ function loadScenes() {
         `;
         list.appendChild(card);
       });
+      
     })
     .catch(err => console.error('Error loading scenes:', err));
 }

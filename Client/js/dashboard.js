@@ -75,6 +75,13 @@ function loadFeaturedScenes() {
     `;
         container.appendChild(card);
       });
+      const viewButtons = document.querySelectorAll('.view-scene');
+        viewButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const sceneId = button.getAttribute('data-id');
+            window.location.href = `scenes.html?id=${sceneId}`;
+          });
+        });
     })
     .catch(err => {
       container.innerHTML = '<p>Error loading scenes.</p>';

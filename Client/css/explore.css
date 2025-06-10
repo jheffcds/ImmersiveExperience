@@ -57,6 +57,10 @@
     left: 125%;
   }
 }
+.btn-how-it-works:hover::before {
+  animation: shine 1.5s;
+}
+
 
 .hero p {
   font-size: 1.2rem;

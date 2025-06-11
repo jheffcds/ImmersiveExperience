@@ -1004,3 +1004,22 @@ a {
     font-size: 0.95rem;
   }
 }
+.heart-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #e74c3c;
+  margin-top: 1rem;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.heart-button:hover {
+  transform: scale(1.1);
+}
+
+.heart-button.favorited {
+  color: #c0392b;
+  content: '♥';
+}
+

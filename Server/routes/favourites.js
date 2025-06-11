@@ -5,30 +5,37 @@ const User = require('../models/User');
 
 // Add or remove sceneId from user's favourites
 router.post('/', authenticateToken, async (req, res) => {
-  try {
-    const { sceneId } = req.body;
-    const user = await User.findById(req.user._id);
+  const { sceneId } = req.body;
 
+  if (!sceneId) {
+    return res.status(400).json({ error: 'sceneId is required' });
+  }
+
+  const userId = req.user.userId; // ✅ Extracted from token
+
+  try {
+    const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    const index = user.favourites.indexOf(sceneId);
+    const index = user.favorites.indexOf(sceneId);
 
     if (index === -1) {
-      // Add to favourites
-      user.favourites.push(sceneId);
+      user.favorites.push(sceneId);
     } else {
-      // Remove from favourites
-      user.favourites.splice(index, 1);
+      user.favorites.splice(index, 1); // Toggle off
     }
 
     await user.save();
-    res.status(200).json({ favourites: user.favourites });
 
+    res.status(200).json({
+      message: 'Favourite list updated',
+      favourites: user.favorites,
+    });
   } catch (err) {
-    console.error('Favourite toggle failed:', err);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error adding to favourites:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

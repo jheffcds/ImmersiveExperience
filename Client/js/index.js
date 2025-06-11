@@ -122,29 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             storyEl.innerHTML = `<strong>Story:</strong> ${scene.story || 'No story available.'}`;
             descEl.innerHTML = `<strong>Description:</strong> ${scene.description || 'No description available.'}`;
           }
-          // Favorite button logic
-        const favoriteBtn = document.getElementById('favoriteBtn');
-        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
-        const isFavorited = favorites.includes(sceneId);
-        updateHeartUI(favoriteBtn, isFavorited);
-
-        favoriteBtn.addEventListener('click', () => {
-          let updatedFavorites;
-          if (favorites.includes(sceneId)) {
-            updatedFavorites = favorites.filter(id => id !== sceneId);
-          } else {
-            updatedFavorites = [...favorites, sceneId];
-          }
-
-          localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-          updateHeartUI(favoriteBtn, updatedFavorites.includes(sceneId));
-        });
-
-        function updateHeartUI(button, isFav) {
-          button.textContent = isFav ? '♥ Remove from Favorites' : '♡ Add to Favorites';
-          button.classList.toggle('favorited', isFav);
-        }
           const gallery = document.querySelector('.gallery');
           if (gallery) {
             gallery.innerHTML = '';
@@ -170,5 +148,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
   }
-  
 });

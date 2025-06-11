@@ -142,44 +142,37 @@ document.addEventListener('DOMContentLoaded', () => {
           // ================================
           // Favourites Button Logic
           // ================================
-          const favBtn = document.getElementById('favoriteBtn');
-          if (favBtn) {
-            const token = localStorage.getItem('token');
-            if (token) {
-            fetch('/api/favourites', {
-                headers: { Authorization: `Bearer ${token}` }
-            })
-                .then(res => res.json())
-                .then(favs => {
-                const isFavourite = favs.some(fav => fav._id === sceneId);
-                favBtn.textContent = isFavourite ? '♥' : '♡';
-                })
-                .catch(() => {
-                favBtn.textContent = '♡';
-                });
-            }
-            favBtn.addEventListener('click', () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                if (confirm('You must be logged in to favorite a scene. Go to login page?')) {
-                window.location.href = '/signin.html';
+          favBtn.addEventListener('click', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            if (confirm('You must be logged in to favorite a scene. Go to login page?')) {
+            window.location.href = '/signin.html';
             }
             return;
-            }
-            fetch('/api/favourites', {
-            headers: { Authorization: `Bearer ${token}` }
+        }
+
+        fetch('/api/favourites', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ sceneId })
+        })
+            .then(res => {
+            if (!res.ok) throw new Error('Failed to toggle favourite');
+            return res.json();
             })
-            .then(res => res.json())
-            .then(favs => {
-                const isFavourite = favs.includes(sceneId); // Fix here
-                favBtn.textContent = isFavourite ? '♥' : '♡';
-                favBtn.classList.toggle('active', isFavourite); // Add this line
+            .then(data => {
+            const isFavNow = data.favourites.includes(sceneId);
+            favBtn.textContent = isFavNow ? '♥' : '♡';
+            favBtn.classList.toggle('active', isFavNow);
             })
-                .catch(err => {
-                console.error('Favourite toggle failed:', err);
-                });
+            .catch(err => {
+            console.error('Favourite toggle failed:', err);
             });
-          }
+        });
+
 
         })
         .catch(error => {

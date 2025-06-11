@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
-const User = require('../models/Scene');
 
 // Add or remove sceneId from user's favourites
 router.post('/', authenticateToken, async (req, res) => {

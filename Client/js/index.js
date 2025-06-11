@@ -142,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // ================================
           // Favourites Button Logic
           // ================================
+          const favBtn = document.getElementById('favoriteBtn');
           favBtn.addEventListener('click', () => {
         const token = localStorage.getItem('token');
         if (!token) {

@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     commonLinks.forEach(link => {
       const li = document.createElement('li');
-      li.innerHTML = <a href="${link.href}">${link.label}</a>;
+      li.innerHTML = `<a href="${link.href}">${link.label}</a>`;
       navLinks.appendChild(li);
     });
 
@@ -28,15 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const isAdmin = userRole === 'admin';
 
       const profileLi = document.createElement('li');
-      profileLi.innerHTML = <a href="${isAdmin ? 'adminDashboard.html' : 'dashboard.html'}">Profile</a>;
+      profileLi.innerHTML = `<a href="${isAdmin ? 'adminDashboard.html' : 'dashboard.html'}">Profile</a>`;
       navLinks.appendChild(profileLi);
 
       const logoutLi = document.createElement('li');
-      logoutLi.innerHTML = <button id="logoutBtn" class="btn-secondary logout-btn">Logout</button>;
+      logoutLi.innerHTML = `<button id="logoutBtn" class="btn-secondary logout-btn">Logout</button>`;
       navLinks.appendChild(logoutLi);
     } else {
       const signInLi = document.createElement('li');
-      signInLi.innerHTML = <a id="signInBtn" href="signin.html">Sign In</a>;
+      signInLi.innerHTML = `<a id="signInBtn" href="signin.html">Sign In</a>`;
       navLinks.appendChild(signInLi);
     }
   }
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const logo = document.getElementById('logoText');
   if (logo) {
     setTimeout(() => {
-      logo.innerHTML = VERITY;
+      logo.innerHTML = `VERITY`;
     }, 2000);
   }
 

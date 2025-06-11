@@ -1,53 +1,34 @@
 const express = require('express');
 const router = express.Router();
+const authenticate = require('../middlewares/authenticateToken');
 const User = require('../models/User');
-const Scene = require('../models/Scene');
-const authenticateToken = require('../middleware/auth');
 
-// ================= GET all favourite scenes for the logged-in user =================
-router.get('/', authenticateToken, async (req, res) => {
+// Add or remove sceneId from user's favourites
+router.post('/', authenticate, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).populate('favouriteScenes');
-    res.json(user.favouriteScenes);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to get favourites', error: err.message });
-  }
-});
+    const { sceneId } = req.body;
+    const user = await User.findById(req.user._id);
 
-// ================= POST: Add a scene to favourites =================
-router.post('/:sceneId', authenticateToken, async (req, res) => {
-  try {
-    const { sceneId } = req.params;
-    const user = await User.findById(req.user.userId);
-
-    if (user.favouriteScenes.includes(sceneId)) {
-      return res.status(400).json({ message: 'Scene already in favourites' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    user.favouriteScenes.push(sceneId);
-    await user.save();
-    res.status(200).json({ message: 'Scene added to favourites' });
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to add to favourites', error: err.message });
-  }
-});
+    const index = user.favourites.indexOf(sceneId);
 
-// ================= DELETE: Remove a scene from favourites =================
-router.delete('/:sceneId', authenticateToken, async (req, res) => {
-  try {
-    const { sceneId } = req.params;
-    const user = await User.findById(req.user.userId);
-
-    const index = user.favouriteScenes.indexOf(sceneId);
     if (index === -1) {
-      return res.status(404).json({ message: 'Scene not in favourites' });
+      // Add to favourites
+      user.favourites.push(sceneId);
+    } else {
+      // Remove from favourites
+      user.favourites.splice(index, 1);
     }
 
-    user.favouriteScenes.splice(index, 1);
     await user.save();
-    res.status(200).json({ message: 'Scene removed from favourites' });
+    res.status(200).json({ favourites: user.favourites });
+
   } catch (err) {
-    res.status(500).json({ message: 'Failed to remove from favourites', error: err.message });
+    console.error('Favourite toggle failed:', err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

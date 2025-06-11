@@ -1,5 +1,3 @@
-const { load } = require("mime");
-
 document.addEventListener('DOMContentLoaded', () => {
   const name = localStorage.getItem('userName') || 'User';
   const picture = localStorage.getItem('userPicture') || 'uploads/profile/default.png';

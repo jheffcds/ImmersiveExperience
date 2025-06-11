@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
+const User = require('../models/Scene');
 
 // Add or remove sceneId from user's favourites
 router.post('/', authenticateToken, async (req, res) => {
@@ -19,19 +20,19 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const index = user.favorites.indexOf(sceneId);
+    const index = user.favourites.indexOf(sceneId);
 
     if (index === -1) {
-      user.favorites.push(sceneId);
+      user.favourites.push(sceneId);
     } else {
-      user.favorites.splice(index, 1); // Toggle off
+      user.favourites.splice(index, 1); // Toggle off
     }
 
     await user.save();
 
     res.status(200).json({
       message: 'Favourite list updated',
-      favourites: user.favorites,
+      favourites: user.favourites,
     });
   } catch (err) {
     console.error('Error adding to favourites:', err);

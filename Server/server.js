@@ -13,6 +13,8 @@ const configRoutes = require('./routes/config');
 const userRoutes = require('./routes/users');
 const purchaseRoutes = require('./routes/purchase');
 const adminSceneRoutes = require('./routes/adminScenes');
+const favouriteRoutes = require('./routes/favourites');
+
 
 // API routes
 app.use('/api/auth', authRoutes);
@@ -23,6 +25,8 @@ app.use('/uploads', express.static('public/uploads'));
 app.use('/api/user', userRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin/scenes', adminSceneRoutes);
+app.use('/api/favourites', favouriteRoutes);
+
 // Serve static scene images
 try {
   app.use('/scenes', express.static(path.join(__dirname, 'scenes')));

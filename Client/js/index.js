@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ================================
+  // ================================
   // Modal Logic
   // ================================
   const openModalBtn = document.getElementById('openModal');
@@ -77,12 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
           card.innerHTML = `
             <img src="${imageUrl}" alt="${scene.title || 'Scene'}" />
             <div class="card-content">
-            <h3>${scene.title || 'Untitled Scene'}</h3>
-            <p>${shortDescription}</p>
-            <p><strong>Price:</strong> ${price === 0 ? 'Free' : `$${price.toFixed(2)}`}</p>
-            <button class="btn view-scene" data-id="${scene._id}">View</button>
+              <h3>${scene.title || 'Untitled Scene'}</h3>
+              <p>${shortDescription}</p>
+              <p><strong>Price:</strong> ${price === 0 ? 'Free' : `$${price.toFixed(2)}`}</p>
+              <button class="btn view-scene" data-id="${scene._id}">View</button>
             </div>
-            `;
+          `;
 
           projectCardsContainer.appendChild(card);
         });
@@ -138,6 +138,60 @@ document.addEventListener('DOMContentLoaded', () => {
               gallery.innerHTML = '<p>No images available for this scene.</p>';
             }
           }
+
+          // ================================
+          // Favourites Button Logic
+          // ================================
+          const favBtn = document.getElementById('favoriteBtn');
+          if (favBtn) {
+            const token = localStorage.getItem('token');
+            if (token) {
+            fetch('/api/favourites', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(favs => {
+                const isFavourite = favs.some(fav => fav._id === sceneId);
+                favBtn.textContent = isFavourite ? '♥' : '♡';
+                })
+                .catch(() => {
+                favBtn.textContent = '♡';
+                });
+            }
+            favBtn.addEventListener('click', () => {
+              const token = localStorage.getItem('token');
+            if (!token) {
+            alert('You must be logged in to manage favourites.');
+            return;
+            }
+
+            const isFav = favBtn.textContent === '♥';
+            const method = isFav ? 'DELETE' : 'POST';
+            const url = isFav ? `/api/favourites/${sceneId}` : '/api/favourites';
+            const options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+            };
+
+            if (!isFav) {
+            options.body = JSON.stringify({ sceneId });
+            }
+
+            fetch(url, options)
+            .then(res => {
+                if (!res.ok) throw new Error();
+                favBtn.textContent = isFav ? '♡' : '♥';
+            })
+            .catch(err => {
+                console.error('Favourite toggle failed:', err);
+            });
+
+            });
+          }
+
         })
         .catch(error => {
           console.error('Error loading scene:', error);

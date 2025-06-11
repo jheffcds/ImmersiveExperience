@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   profilePicture: { type: String, default: 'uploads/profile/default.png' },  // 👈 new field
   address: { type: String, default: '' }, 
   role: { type: String, default: 'user' },
-  favourites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene' }],
-  purchasedScenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene' }],
+  favourites: { type: [mongoose.Schema.Types.ObjectId], ref: 'Scene', default: [] },
+  purchasedScenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene', default: [] }]
 }
 , { timestamps: true }); // timestamps for createdAt and updatedAt
 

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../middlewares/authenticateToken');
+const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
 
 // Add or remove sceneId from user's favourites
-router.post('/', authenticate, async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const { sceneId } = req.body;
     const user = await User.findById(req.user._id);

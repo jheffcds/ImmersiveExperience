@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.getElementById('navLinks');
 
   if (navLinks) {
-    navLinks.innerHTML = ''; // Clear current nav links if any
+    navLinks.innerHTML = ''; // Clear current nav links
 
     // Common nav items
     const commonLinks = [
@@ -23,25 +23,42 @@ document.addEventListener('DOMContentLoaded', () => {
       navLinks.appendChild(li);
     });
 
+    // === Authenticated User ===
     if (token && userName) {
       const userRole = localStorage.getItem('userRole');
       const isAdmin = userRole === 'admin';
 
+      // Cart Icon
+      const cartLi = document.createElement('li');
+      const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+      cartLi.innerHTML = `
+        <a href="cart.html" id="cartIcon">
+          🛒 <span id="cart-count">${cartItems.length}</span>
+        </a>
+      `;
+      navLinks.appendChild(cartLi);
+
+      // Profile Link
       const profileLi = document.createElement('li');
       profileLi.innerHTML = `<a href="${isAdmin ? 'adminDashboard.html' : 'dashboard.html'}">Profile</a>`;
       navLinks.appendChild(profileLi);
 
+      // Logout Button
       const logoutLi = document.createElement('li');
       logoutLi.innerHTML = `<button id="logoutBtn" class="btn-secondary logout-btn">Logout</button>`;
       navLinks.appendChild(logoutLi);
-    } else {
+    }
+    // === Guest User ===
+    else {
       const signInLi = document.createElement('li');
       signInLi.innerHTML = `<a id="signInBtn" href="signin.html">Sign In</a>`;
       navLinks.appendChild(signInLi);
     }
   }
 
-  // Attach Logout Logic (dynamic)
+  // ================================
+  // Logout Button Handler
+  // ================================
   document.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'logoutBtn') {
       localStorage.clear();
@@ -50,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ================================
-  // VR to Verity Logo Animation
+  // VR to VERITY Logo Animation
   // ================================
   const logo = document.getElementById('logoText');
   if (logo) {
@@ -68,6 +85,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('navLinks').classList.toggle('active');
     });
   }
+
+  // ================================
+  // Contact Us Button
+  // ================================
   const contactBtn = document.getElementById('contactUsBtn');
   if (contactBtn) {
     contactBtn.addEventListener('click', () => {

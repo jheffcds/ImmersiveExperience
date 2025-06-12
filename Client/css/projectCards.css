@@ -189,3 +189,48 @@
 .card-content .remove-item:hover {
   background-color: #c0392b;
 }
+/* Style container for total + button */
+.cart-summary {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 2px solid #ddd;
+}
+
+/* Total styling */
+#cart-total {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Stylish checkout button */
+#checkoutBtn {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#checkoutBtn:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+#card-items {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+@media (max-width: 768px) {
+  #card-items {
+    flex-direction: column;
+  }
+}

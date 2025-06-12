@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartIcon = document.getElementById('cartIcon');
   const cartCount = document.getElementById('cart-count');
 
+  if (!cartItemsContainer || !cartTotal || !checkoutBtn) return;
   if (!token) {
     // Hide cart icon if not logged in
     if (cartIcon) cartIcon.style.display = 'none';

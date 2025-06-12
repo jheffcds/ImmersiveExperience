@@ -1017,7 +1017,7 @@ a {
 
 .heart-button:hover {
   transform: scale(1.1);
-  color: #ff0000;
+  color: red;
 }
 
 

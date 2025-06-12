@@ -202,15 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
           // === Add to Cart Logic ==========
           // ================================
           const price = parseFloat(scene.price) || 0;
-          if (price > 0 && token) {
-            const addToCartBtn = document.createElement('button');
-            addToCartBtn.className = 'add-to-cart-btn';
+          if (price > 0) {
+            const addToCartBtn = document.getElementsByClassName('experience-btn');
             addToCartBtn.textContent = 'Add to Cart';
             addToCartBtn.addEventListener('click', () => {
+            if (!token) {
+              alert("You must be logged in to access your cart.");
+              window.location.href = "/signin.html";
+              return;
+            }
               const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
               const exists = cartItems.find(item => item._id === scene._id);
               if (!exists) {
-                cartItems.push(scene);
+                cartItems.push(scene._id);
                 localStorage.setItem('cart', JSON.stringify(cartItems));
                 const cartCount = document.getElementById('cart-count');
                 if (cartCount) cartCount.textContent = cartItems.length;

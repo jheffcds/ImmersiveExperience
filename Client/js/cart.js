@@ -5,11 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+  const cartIcon = document.getElementById('cartIcon');
+  const cartCount = document.getElementById('cart-count');
+
   if (!token) {
-    alert("You must be logged in to access your cart.");
-    window.location.href = "/signin.html";
-    return;
+    // Hide cart icon if not logged in
+    if (cartIcon) cartIcon.style.display = 'none';
+  } else {
+    // Show cart icon if logged in
+    if (cartIcon) cartIcon.style.display = 'inline-block';
+
+    // Update cart count
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cartCount) cartCount.textContent = cartItems.length;
   }
+
 
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";

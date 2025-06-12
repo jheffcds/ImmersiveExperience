@@ -173,3 +173,19 @@
 .card-btn:hover {
   background-color: rgba(37, 99, 235, 0.95);
 }
+.card-content .remove-item {
+  align-self: flex-start;
+  margin-top: auto;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.card-content .remove-item:hover {
+  background-color: #c0392b;
+}

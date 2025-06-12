@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // ================================
           const price = parseFloat(scene.price) || 0;
           if (price > 0) {
-            const addToCartBtn = document.getElementsByClassName('experience-btn');
+            const addToCartBtn = document.querySelector('.experience-btn');
             addToCartBtn.textContent = 'Add to Cart';
             addToCartBtn.addEventListener('click', () => {
             if (!token) {

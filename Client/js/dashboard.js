@@ -24,7 +24,8 @@ function showUserSection(section) {
       break;
 
     case 'purchased':
-      content.innerHTML = `<h2>🛒 Purchased Scenes</h2><div id="exploreSceneCards">Coming soon...</div>`;
+      content.innerHTML = `<h2>🛒 Purchased Scenes</h2><div id="exploreSceneCards">Loading...</div>`;
+      purchasedScenes();
       break;
   }
 }
@@ -174,4 +175,5 @@ function loadFavouriteScenes() {
       container.innerHTML = '<p>Error loading favourites.</p>';
     });
 }
+
 

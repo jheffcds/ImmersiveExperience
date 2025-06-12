@@ -142,64 +142,90 @@ document.addEventListener('DOMContentLoaded', () => {
           // ================================
           // Favourites Button Logic
           // ================================
+          const favBtn = document.getElementById('favouriteBtn');
+          const token = localStorage.getItem('token');
 
-            const favBtn = document.getElementById('favouriteBtn');
-            const token = localStorage.getItem('token');
-
-            if (favBtn) {
-              // On page load, check if this scene is a favourite
-              if (token) {
-                fetch('/api/favourites', {
-                  method: 'GET',
-                  headers: {
-                    'Authorization': `Bearer ${token}`
-                  }
-                })
-                .then(res => {
-                  if (!res.ok) throw new Error('Failed to fetch favourites');
-                  return res.json();
-                })
-                .then(data => {
-                  const isFav = data.favourites.includes(sceneId);
-                  favBtn.textContent = isFav ? '♥' : '♡';
-                  favBtn.classList.toggle('active', isFav);
-                })
-                .catch(err => {
-                  console.error('Error checking favourite status:', err);
-                });
-              }
-
-              // Toggle favourite on click
-              favBtn.addEventListener('click', () => {
-                if (!token) {
-                  if (confirm('You must be logged in to favorite a scene. Go to login page?')) {
-                    window.location.href = '/signin.html';
-                  }
-                  return;
+          if (favBtn) {
+            if (token) {
+              fetch('/api/favourites', {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`
                 }
-
-                fetch('/api/favourites', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                  },
-                  body: JSON.stringify({ sceneId })
-                })
-                .then(res => {
-                  if (!res.ok) throw new Error('Failed to toggle favourite');
-                  return res.json();
-                })
-                .then(data => {
-                  const isFavNow = data.favourites.includes(sceneId);
-                  favBtn.textContent = isFavNow ? '♥' : '♡';
-                  favBtn.classList.toggle('active', isFavNow);
-                })
-                .catch(err => {
-                  console.error('Favourite toggle failed:', err);
-                });
+              })
+              .then(res => {
+                if (!res.ok) throw new Error('Failed to fetch favourites');
+                return res.json();
+              })
+              .then(data => {
+                const isFav = data.favourites.includes(sceneId);
+                favBtn.textContent = isFav ? '♥' : '♡';
+                favBtn.classList.toggle('active', isFav);
+              })
+              .catch(err => {
+                console.error('Error checking favourite status:', err);
               });
             }
+
+            favBtn.addEventListener('click', () => {
+              if (!token) {
+                if (confirm('You must be logged in to favorite a scene. Go to login page?')) {
+                  window.location.href = '/signin.html';
+                }
+                return;
+              }
+
+              fetch('/api/favourites', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ sceneId })
+              })
+              .then(res => {
+                if (!res.ok) throw new Error('Failed to toggle favourite');
+                return res.json();
+              })
+              .then(data => {
+                const isFavNow = data.favourites.includes(sceneId);
+                favBtn.textContent = isFavNow ? '♥' : '♡';
+                favBtn.classList.toggle('active', isFavNow);
+              })
+              .catch(err => {
+                console.error('Favourite toggle failed:', err);
+              });
+            });
+          }
+
+          // ================================
+          // === Add to Cart Logic ==========
+          // ================================
+          const price = parseFloat(scene.price) || 0;
+          if (price > 0 && token) {
+            const addToCartBtn = document.createElement('button');
+            addToCartBtn.className = 'add-to-cart-btn';
+            addToCartBtn.textContent = 'Add to Cart';
+            addToCartBtn.addEventListener('click', () => {
+              const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+              const exists = cartItems.find(item => item._id === scene._id);
+              if (!exists) {
+                cartItems.push(scene);
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) cartCount.textContent = cartItems.length;
+                alert('Scene added to cart!');
+              } else {
+                alert('Scene is already in your cart.');
+              }
+            });
+
+            // Append the button below the scene details
+            const details = document.getElementById('scene-details');
+            if (details) {
+              details.appendChild(addToCartBtn);
+            }
+          }
         })
         .catch(error => {
           console.error('Error loading scene:', error);

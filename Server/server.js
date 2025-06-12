@@ -14,6 +14,8 @@ const userRoutes = require('./routes/users');
 const purchaseRoutes = require('./routes/purchase');
 const adminSceneRoutes = require('./routes/adminScenes');
 const favouriteRoutes = require('./routes/favourites');
+const checkoutRoutes = require('./routes/checkout');
+
 
 
 // API routes
@@ -26,6 +28,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin/scenes', adminSceneRoutes);
 app.use('/api/favourites', favouriteRoutes);
+app.use('/api', checkoutRoutes);
 
 // Serve static scene images
 try {

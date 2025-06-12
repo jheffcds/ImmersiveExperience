@@ -37,12 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
         </a>
       `;
       navLinks.appendChild(cartLi);
-
       // Profile Link
       const profileLi = document.createElement('li');
       profileLi.innerHTML = `<a href="${isAdmin ? 'adminDashboard.html' : 'dashboard.html'}">Profile</a>`;
       navLinks.appendChild(profileLi);
-
       // Logout Button
       const logoutLi = document.createElement('li');
       logoutLi.innerHTML = `<button id="logoutBtn" class="btn-secondary logout-btn">Logout</button>`;

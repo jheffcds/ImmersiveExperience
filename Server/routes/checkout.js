@@ -1,12 +1,12 @@
 // routes/checkout.js
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../middleware/authMiddleware');
+const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
 const Scene = require('../models/Scene');
 
 // POST /api/checkout
-router.post('/checkout', authenticate, async (req, res) => {
+router.post('/checkout', authenticateToken, async (req, res) => {
   try {
     const userId = req.user._id;
     const { sceneIds } = req.body;

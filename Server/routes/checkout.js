@@ -1,12 +1,14 @@
 // routes/checkout.js
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/authenticateToken');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const User = require('../models/User');
 const Scene = require('../models/Scene');
+const authenticateToken = require('../middleware/authenticateToken');
+const sendEmail = require('../utils/sendEmail'); // Utility you'll create
 
-// POST /api/checkout
-router.post('/checkout', authenticateToken, async (req, res) => {
+// ✅ Create Stripe Checkout Session
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const userId = req.user._id;
     const { sceneIds } = req.body;
@@ -15,25 +17,36 @@ router.post('/checkout', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: 'No scenes selected for purchase.' });
     }
 
-    const validScenes = await Scene.find({ _id: { $in: sceneIds } });
+    const scenes = await Scene.find({ _id: { $in: sceneIds } });
 
-    const user = await User.findById(userId);
+    const line_items = scenes.map(scene => ({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: scene.title,
+        },
+        unit_amount: Math.round(scene.price * 100),
+      },
+      quantity: 1,
+    }));
 
-    const newPurchases = validScenes
-      .filter(scene => !user.purchasedScenes.includes(scene._id))
-      .map(scene => scene._id);
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items,
+      mode: 'payment',
+      success_url: `${process.env.CLIENT_URL}/success.html`,
+      cancel_url: `${process.env.CLIENT_URL}/cart.html`,
+      metadata: {
+        userId: userId.toString(),
+        sceneIds: JSON.stringify(sceneIds)
+      }
+    });
 
-    if (newPurchases.length > 0) {
-      user.purchasedScenes.push(...newPurchases);
-      await user.save();
-    }
-
-    res.status(200).json({ message: 'Checkout complete.', purchasedScenes: user.purchasedScenes });
+    res.json({ url: session.url });
   } catch (err) {
-    console.error('Checkout error:', err);
-    res.status(500).json({ message: 'Server error during checkout.' });
+    console.error('Checkout session creation failed:', err);
+    res.status(500).json({ message: 'Checkout session creation failed' });
   }
 });
 
 module.exports = router;
-

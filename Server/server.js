@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
 const app = express();
+const webhookRoutes = require('./routes/webhook');
 app.use(cors());
-app.use(express.json());
+
 const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
@@ -15,9 +16,6 @@ const purchaseRoutes = require('./routes/purchase');
 const adminSceneRoutes = require('./routes/adminScenes');
 const favouriteRoutes = require('./routes/favourites');
 const checkoutRoutes = require('./routes/checkout');
-
-
-
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
@@ -28,7 +26,9 @@ app.use('/api/user', userRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin/scenes', adminSceneRoutes);
 app.use('/api/favourites', favouriteRoutes);
-app.use('/api', checkoutRoutes);
+app.use('/api', checkoutRoutes); // Standard routes
+app.use('/api/checkout/webhook', webhookRoutes);
+app.use(express.json());
 
 // Serve static scene images
 try {

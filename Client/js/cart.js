@@ -69,9 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
           .then(res => res.json())
           .then(data => {
-            alert('Purchase complete!');
-            localStorage.removeItem('cart');
-            window.location.href = '/dashboard.html';
+            if (data.url) {
+              // Clear cart before redirect to prevent duplicates if they come back
+              localStorage.removeItem('cart');
+              window.location.href = data.url; // Redirect to Stripe Checkout
+            } else {
+              throw new Error('Checkout URL missing');
+            }
           })
           .catch(err => {
             console.error('Checkout failed:', err);

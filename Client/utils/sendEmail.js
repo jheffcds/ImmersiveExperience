@@ -2,15 +2,17 @@ const nodemailer = require('nodemailer');
 
 const sendEmail = async ({ to, subject, text, html }) => {
   const transporter = nodemailer.createTransport({
-    service: 'Gmail', // or your SMTP config
+    host: 'smtp.aruba.it',
+    port: 587,
+    secure: false, // true for port 465, false for 587
     auth: {
-      user: process.env.EMAIL_USER,
+      user: process.env.EMAIL_USER, // e.g. info@vr-verity.com
       pass: process.env.EMAIL_PASS,
     },
   });
 
   await transporter.sendMail({
-    from: `"Step Into Art VR" <${process.env.EMAIL_USER}>`,
+    from: `"VR VERITY" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     text,

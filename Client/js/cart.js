@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutBtn.style.display = "none";
     return;
   }
-
   fetch(`/api/scenes`)
     .then(res => res.json())
     .then(allScenes => {
@@ -42,13 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <button class="btn-secondary remove-item" data-id="${scene._id}">Remove</button>
             </div>
           `;
-
           cartItemsContainer.appendChild(card);
         }
       });
-
       cartTotal.innerHTML = `<strong>Total: $${total.toFixed(2)}</strong>`;
-
       document.querySelectorAll('.remove-item').forEach(btn => {
         btn.addEventListener('click', () => {
           const idToRemove = btn.getAttribute('data-id');
@@ -57,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
           location.reload();
         });
       });
-
       checkoutBtn.addEventListener('click', () => {
         fetch('/api/checkout', {
           method: 'POST',

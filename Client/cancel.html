@@ -37,7 +37,6 @@
   </style>
 </head>
 <body>
-
   <nav class="navbar">
     <div class="logo-container">
       <a href="index.html"><img src="assets/images/logo.png" alt="Logo" class="logo-icon" /></a>
@@ -50,7 +49,6 @@
       <li><button id="logoutBtn" class="btn-secondary logout-btn">Logout</button></li>
     </ul>
   </nav>
-
   <main class="cancel-container">
     <img src="assets/images/logo.png" alt="VR Verity Logo">
     <h1>Purchase Canceled</h1>
@@ -58,14 +56,17 @@
     <p>No worries! You can return to your cart and try again whenever you're ready.</p>
     <a href="cart.html" class="btn-primary">Back to Cart</a>
   </main>
-
   <footer class="site-footer">
     <div class="footer-content">
       <p>&copy; 2025 Step Into Art by Jhefferson. All rights reserved.</p>
       <p>Contact: <a href="mailto:info@vr-verity.com">info@vr-verity.com</a></p>
     </div>
   </footer>
-
   <script src="js/main.js"></script>
+  <script>
+  localStorage.removeItem('cart');
+  console.log("🧹 localStorage cleared on cancel too.");
+</script>
+
 </body>
 </html>

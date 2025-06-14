@@ -6,7 +6,6 @@ const User = require('../models/User');
 const Scene = require('../models/Scene');
 const authenticateToken = require('../middleware/authenticateToken');
 const sendEmail = require('../utils/sendEmail'); // Utility you'll create
-
 // ✅ Create Stripe Checkout Session
 router.post('/', authenticateToken, async (req, res) => {
   try {
@@ -16,9 +15,7 @@ router.post('/', authenticateToken, async (req, res) => {
     if (!Array.isArray(sceneIds) || sceneIds.length === 0) {
       return res.status(400).json({ message: 'No scenes selected for purchase.' });
     }
-
     const scenes = await Scene.find({ _id: { $in: sceneIds } });
-
     const line_items = scenes.map(scene => ({
       price_data: {
         currency: 'usd',
@@ -29,7 +26,6 @@ router.post('/', authenticateToken, async (req, res) => {
       },
       quantity: 1,
     }));
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items,
@@ -41,12 +37,10 @@ router.post('/', authenticateToken, async (req, res) => {
         sceneIds: JSON.stringify(sceneIds)
       }
     });
-
     res.json({ url: session.url });
   } catch (err) {
     console.error('Checkout session creation failed:', err);
     res.status(500).json({ message: 'Checkout session creation failed' });
   }
 });
-
 module.exports = router;

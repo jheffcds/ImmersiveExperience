@@ -6,46 +6,37 @@ const User = require('../models/User');
 const Scene = require('../models/Scene');
 const bodyParser = require('body-parser');
 const sendEmail = require('../utils/sendEmail');
-
 router.post(
   '/checkout/webhook',
   bodyParser.raw({ type: 'application/json' }),
   async (req, res) => {
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
     let event;
-
     try {
       event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     } catch (err) {
       console.error('❌ Webhook signature verification failed:', err.message);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
-
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const customerEmail = session.customer_email;
       const metadata = session.metadata;
-
       try {
         const user = await User.findOne({ email: customerEmail });
         if (!user) {
           console.warn(`⚠️ User not found for email: ${customerEmail}`);
           return res.status(404).json({ message: 'User not found' });
         }
-
         const sceneIds = JSON.parse(metadata.sceneIds);
         const validScenes = await Scene.find({ _id: { $in: sceneIds } });
-
         const newPurchases = validScenes
           .filter(scene => !user.purchasedScenes.includes(scene._id))
           .map(scene => scene._id);
-
         if (newPurchases.length > 0) {
           user.purchasedScenes.push(...newPurchases);
           await user.save();
-
           await sendEmail({
             to: user.email,
             subject: '🎉 Thank You for Your VR Scene Purchase!',
@@ -88,7 +79,6 @@ router.post(
                 </div>
               `
           });
-
           console.log(`✅ Updated purchasedScenes and sent email to ${user.email}`);
         }
       } catch (err) {
@@ -96,9 +86,7 @@ router.post(
         return res.status(500).send('Webhook processing error');
       }
     }
-
     res.status(200).json({ received: true });
   }
 );
-
 module.exports = router;

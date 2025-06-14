@@ -6,7 +6,6 @@ const cors = require('cors');
 const app = express();
 const webhookRoutes = require('./routes/webhook');
 app.use(cors());
-
 const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
@@ -28,8 +27,8 @@ app.use('/api/admin/scenes', adminSceneRoutes);
 app.use('/api/favourites', favouriteRoutes);
 app.use('/api', checkoutRoutes); // Standard routes
 app.use('/api/checkout/webhook', webhookRoutes);
-app.use(express.json());
 
+app.use(express.json());
 // Serve static scene images
 try {
   app.use('/scenes', express.static(path.join(__dirname, 'scenes')));
@@ -37,7 +36,6 @@ try {
 } catch (err) {
   console.error('access to scene folder denied:', err.message);
 }
-
 // Serve static frontend files from the Client directory
 try {
   app.use(express.static(path.join(__dirname, '../Client')));
@@ -54,17 +52,14 @@ try {
 }
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../Client', 'dashboard.html'));
-});app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, '../Client', 'dashboard.html'));
 });
+
 
 // Fallback to index.html for any other route (good for SPAs)
 app.get('/*splat', (req, res) => {
   console.log('here server');
   res.sendFile(path.join(__dirname, '../Client', 'index.html'));
 });
-
-
 // MongoDB connection and server start
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

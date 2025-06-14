@@ -10,6 +10,7 @@ const sendEmail = require('../utils/sendEmail');
 router.post('/',
   bodyParser.raw({ type: 'application/json' }),
   async (req, res) => {
+    console.log('Received webhook event');
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

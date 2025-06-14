@@ -1,17 +1,19 @@
-// routes/webhook.js
 const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const User = require('../models/User');
 const Scene = require('../models/Scene');
+const Purchase = require('../models/Purchase'); // ✅ Add this if you're tracking purchases
 const bodyParser = require('body-parser');
 const sendEmail = require('../utils/sendEmail');
+
 router.post(
   '/checkout/webhook',
   bodyParser.raw({ type: 'application/json' }),
   async (req, res) => {
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
     let event;
     try {
       event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
@@ -19,29 +21,46 @@ router.post(
       console.error('❌ Webhook signature verification failed:', err.message);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
+
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
       const customerEmail = session.customer_email;
       const metadata = session.metadata;
+
       try {
         const user = await User.findOne({ email: customerEmail });
         if (!user) {
           console.warn(`⚠️ User not found for email: ${customerEmail}`);
           return res.status(404).json({ message: 'User not found' });
         }
-        const sceneIds = JSON.parse(metadata.sceneIds);
-        const validScenes = await Scene.find({ _id: { $in: sceneIds } });
-        const newPurchases = validScenes
-          .filter(scene => !user.purchasedScenes.includes(scene._id))
-          .map(scene => scene._id);
-        if (newPurchases.length > 0) {
-          user.purchasedScenes.push(...newPurchases);
+
+        const sceneIds = JSON.parse(metadata.sceneIds || '[]');
+        if (!Array.isArray(sceneIds) || sceneIds.length === 0) {
+          return res.status(400).send('Invalid or missing sceneIds in metadata.');
+        }
+
+        const scenes = await Scene.find({ _id: { $in: sceneIds } });
+        const newScenes = scenes.filter(scene => !user.purchasedScenes.includes(scene._id));
+
+        for (const scene of newScenes) {
+          await new Purchase({
+            user: user._id,
+            scene: scene._id,
+            price: scene.price,
+            receiptEmail: user.email
+          }).save();
+        }
+
+        if (newScenes.length > 0) {
+          user.purchasedScenes.push(...newScenes.map(s => s._id));
           await user.save();
+
           await sendEmail({
             to: user.email,
             subject: '🎉 Thank You for Your VR Scene Purchase!',
-            text: `Thanks for your purchase!\n\nScenes:\n${validScenes.map(s => s.title).join('\n')}`,
-            html: `
+            text: `Thanks for your purchase!\n\nScenes:\n${newScenes.map(s => s.title).join('\n')}`,
+            html: 
+            `
                 <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;">
                   <table width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
                     <thead style="background-color: #111827;">
@@ -79,14 +98,17 @@ router.post(
                 </div>
               `
           });
-          console.log(`✅ Updated purchasedScenes and sent email to ${user.email}`);
+
+          console.log(`✅ ${newScenes.length} new scene(s) added to ${user.email}`);
         }
       } catch (err) {
-        console.error('❌ Error handling completed session:', err);
+        console.error('❌ Error handling Stripe session:', err);
         return res.status(500).send('Webhook processing error');
       }
     }
+
     res.status(200).json({ received: true });
   }
 );
+
 module.exports = router;

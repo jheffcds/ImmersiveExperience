@@ -4,7 +4,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
 const Scene = require('../models/Scene');
-
+const mongoose = require('mongoose');
 // POST /api/checkout
 router.post('/', authenticateToken, async (req, res) => {
   try {
@@ -19,7 +19,7 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: 'No scene IDs provided.' });
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(mongoose.Types.ObjectId(userId));
     if (!user) {
       console.warn('❌ User not found for ID:', userId);
       return res.status(404).json({ message: 'User not found.' });

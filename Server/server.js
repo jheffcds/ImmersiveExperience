@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
+app.use(express.json());
 const app = express();
 const webhookRoutes = require('./routes/webhook');
 app.use(cors());
@@ -28,7 +29,7 @@ app.use('/api/favourites', favouriteRoutes);
 app.use('/api', checkoutRoutes); // Standard routes
 app.use('/api/checkout/webhook', webhookRoutes);
 
-app.use(express.json());
+
 // Serve static scene images
 try {
   app.use('/scenes', express.static(path.join(__dirname, 'scenes')));

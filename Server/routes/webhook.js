@@ -7,8 +7,7 @@ const Purchase = require('../models/Purchase');
 const bodyParser = require('body-parser');
 const sendEmail = require('../utils/sendEmail');
 
-router.post(
-  '/checkout/webhook',
+router.post('/',
   bodyParser.raw({ type: 'application/json' }),
   async (req, res) => {
     const sig = req.headers['stripe-signature'];

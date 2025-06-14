@@ -48,7 +48,8 @@ router.post('/', authenticateToken, async (req, res) => {
       success_url: `${process.env.CLIENT_URL}/success.html`,
       cancel_url: `${process.env.CLIENT_URL}/cart.html`,
       metadata: {
-        sceneIds: JSON.stringify(newScenes.map(s => s._id.toString()))
+        sceneIds: JSON.stringify(newScenes.map(s => s._id.toString())),
+        userId: userId.toString()
       }
     });
 

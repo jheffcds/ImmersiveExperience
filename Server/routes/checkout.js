@@ -4,18 +4,38 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
 const Scene = require('../models/Scene');
+
 // POST /api/checkout
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    const sceneIds = req.body.sceneIds;
+    const { userId } = req.user;
+    const { sceneIds } = req.body;
+
     if (!Array.isArray(sceneIds) || sceneIds.length === 0) {
       return res.status(400).json({ message: 'No scene IDs provided.' });
     }
-    const user = await User.findById(req.user.userId);
+
+    const user = await User.findById(userId);
     if (!user) {
+      console.error(`❌ User not found for ID: ${userId}`);
       return res.status(404).json({ error: 'User not found' });
-    };
-    const newScenes = user.purchasedScenes.findIndex(id => id.toString() === sceneIds);
+    }
+
+    const scenes = await Scene.find({ _id: { $in: sceneIds } });
+    if (scenes.length === 0) {
+      return res.status(404).json({ message: 'No scenes found for the provided IDs.' });
+    }
+
+    const userPurchased = user.purchasedScenes || [];
+
+    const newScenes = scenes.filter(
+      scene => !userPurchased.includes(scene._id)
+    );
+
+    if (newScenes.length === 0) {
+      return res.status(400).json({ message: 'All scenes already purchased.' });
+    }
+
     const lineItems = newScenes.map(scene => ({
       price_data: {
         currency: 'usd',
@@ -26,6 +46,7 @@ router.post('/', authenticateToken, async (req, res) => {
       },
       quantity: 1,
     }));
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -38,10 +59,12 @@ router.post('/', authenticateToken, async (req, res) => {
         userId: userId.toString()
       }
     });
+
     res.status(200).json({ url: session.url });
   } catch (err) {
     console.error('❌ Checkout error:', err);
     res.status(500).json({ message: 'Server error during checkout.' });
   }
 });
+
 module.exports = router;

@@ -7,9 +7,7 @@ const Scene = require('../models/Scene');
 
 // POST /api/checkout
 router.post('/', authenticateToken, async (req, res) => {
-  console.log('🔗 Checkout request received:');
   try {
-    console.log('🔗 Checkout request received:', req.body);
     const userId = req.user.userId;
     const sceneIds = req.body.sceneIds;
 
@@ -17,16 +15,21 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: 'No scene IDs provided.' });
     }
 
-    const user = await User.findById(userId);
+    // Ensure we fetch the fields we need
+    const user = await User.findById(userId).select('email purchasedScenes');
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
-    console.log('🧑 User at checkout:', user);
+
+    const purchasedSceneIds = Array.isArray(user.purchasedScenes)
+      ? user.purchasedScenes.map(id => id.toString())
+      : [];
+
     const scenes = await Scene.find({ _id: { $in: sceneIds } });
-    console.log('🔍 Scenes at checkout:', scenes);
-    const newScenes = scenes.filter(
-      scene => !(user.purchasedScenes || []).includes(scene._id)
-    );
+
+    const newScenes = scenes.filter(scene => {
+      return !purchasedSceneIds.includes(scene._id.toString());
+    });
 
     if (newScenes.length === 0) {
       return res.status(400).json({ message: 'All scenes already purchased.' });
@@ -38,7 +41,7 @@ router.post('/', authenticateToken, async (req, res) => {
         product_data: {
           name: scene.title,
         },
-        unit_amount: Math.round(scene.price * 100), // price in cents
+        unit_amount: Math.round(scene.price * 100),
       },
       quantity: 1,
     }));
@@ -52,7 +55,7 @@ router.post('/', authenticateToken, async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL}/cart.html`,
       metadata: {
         sceneIds: JSON.stringify(newScenes.map(s => s._id.toString())),
-        userId: userId.toString()
+        userId: userId.toString(),
       }
     });
 

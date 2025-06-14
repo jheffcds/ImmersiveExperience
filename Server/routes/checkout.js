@@ -21,6 +21,7 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     const scenes = await Scene.find({ _id: { $in: sceneIds } });
+    console.log('🔍 Scenes at checkout:', scenes);
     console.log('🧪 User at checkout:', user);
     const newScenes = scenes.filter(
       scene => !(user.purchasedScenes || []).includes(scene._id)

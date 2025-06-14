@@ -7,6 +7,7 @@ const Scene = require('../models/Scene');
 
 // POST /api/checkout
 router.post('/', authenticateToken, async (req, res) => {
+  console.log('entered checkout route');
   try {
     const userId = req.user.userId;
     const sceneIds = req.body.sceneIds;

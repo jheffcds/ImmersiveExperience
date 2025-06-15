@@ -15,7 +15,6 @@ const purchaseRoutes = require('./routes/purchase');
 const adminSceneRoutes = require('./routes/adminScenes');
 const favouriteRoutes = require('./routes/favourites');
 const checkoutRoutes = require('./routes/checkout');
-
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);

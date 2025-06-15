@@ -3,12 +3,17 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Replace with real secret key
 const Scene = require('../models/Scene');
-const authMiddleware = require('../middleware/auth'); // Protect route if needed
+const Scene = require('../models/User');
+const authMiddleware = require('../middleware/authenticateToken'); // Protect route if needed
 
 router.post('/checkout', authMiddleware, async (req, res) => {
   const { sceneIds } = req.body;
   if (!sceneIds || !Array.isArray(sceneIds) || sceneIds.length === 0) {
     return res.status(400).json({ error: 'No scenes to checkout' });
+  }
+  const user = await User.findById(req.user.userId);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
   }
   try {
     const scenes = await Scene.find({ _id: { $in: sceneIds } });
@@ -30,7 +35,7 @@ router.post('/checkout', authMiddleware, async (req, res) => {
       success_url: 'https://www.vr-verity.com/success.html',
       cancel_url: 'https://www.vr-veriity.com/cart.html',
       metadata: {
-        userId: req.user.id, // req.user is available from auth middleware
+        userId: req.user.userId, // req.user is available from auth middleware
         sceneIds: JSON.stringify(sceneIds), // Pass purchased scenes
       },
     });

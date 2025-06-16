@@ -5,6 +5,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const bodyParser = require('body-parser');
 const Scene = require('../models/Scene');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 
 // Stripe requires raw body for webhooks
 router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
@@ -15,8 +16,9 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    console.log('✅ Webhook event received:', event.type);
   } catch (err) {
-    console.error('Webhook signature verification failed:', err.message);
+    console.error('❌ Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
@@ -25,18 +27,26 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req
     const session = event.data.object;
 
     try {
-      // Get metadata
+      console.log('✅ Processing checkout.session.completed');
       const userId = session.metadata.userId;
-      const sceneIds = JSON.parse(session.metadata.sceneIds); // We’ll add these in step 2
+      const sceneIds = JSON.parse(session.metadata.sceneIds);
+      console.log('Metadata extracted:', { userId, sceneIds });
 
-      // Add purchased scenes to user
-      await User.findByIdAndUpdate(userId, {
-        $addToSet: { purchasedScenes: { $each: sceneIds } }
+      // Convert sceneIds to ObjectId instances
+      const sceneObjectIds = sceneIds.map(id => new mongoose.Types.ObjectId(id));
+
+      // Update user with purchased scenes
+      const result = await User.findByIdAndUpdate(userId, {
+        $addToSet: { purchasedScenes: { $each: sceneObjectIds } }
       });
 
-      console.log(`User ${userId} purchased scenes: ${sceneIds.join(', ')}`);
+      if (!result) {
+        console.warn(`⚠️ User with ID ${userId} not found or not updated`);
+      } else {
+        console.log(`✅ User ${userId} purchased scenes: ${sceneIds.join(', ')}`);
+      }
     } catch (err) {
-      console.error('Error saving purchased scenes:', err);
+      console.error('❌ Error saving purchased scenes:', err);
     }
   }
 

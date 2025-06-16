@@ -39,15 +39,13 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req
       }
 
       const sceneObjectIds = sceneIds.map(id => new mongoose.Types.ObjectId(id));
-      const purchasedScenes = await Scene.find({ _id: { $in: sceneObjectIds } });
-
-      // Save scenes to user profile
-      await User.findByIdAndUpdate(userId, {
-        $addToSet: { purchasedScenes: { $each: sceneObjectIds } }
+      // Add scenes to user's purchasedScenes if not already included
+      sceneObjectIds.forEach(sceneId => {
+        if (!user.purchasedScenes.some(existingId => existingId.equals(sceneId))) {
+          user.purchasedScenes.push(sceneId);
+        }
       });
-
       console.log(`✅ User ${user.email} purchased scenes: ${sceneIds.join(', ')}`);
-
       // 1. Render email HTML using Pug
       const emailHtml = pug.renderFile(
         path.join(__dirname, '../views/emailTemplate.pug'),
@@ -68,10 +66,8 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req
           date: new Date().toLocaleDateString(),
         }
       );
-
       const file = { content: pdfHtml };
       const pdfBuffer = await htmlPdf.generatePdf(file, { format: 'A4' });
-
       // 3. Send email with attachment using Nodemailer
       const transporter = nodemailer.createTransport({
         host: 'smtp.aruba.it',

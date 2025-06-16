@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Replace with real secret key
 const Scene = require('../models/Scene');
+const User = require('../models/User');
 const authMiddleware = require('../middleware/authenticateToken'); // Protect route if needed
 
 router.post('/checkout', authMiddleware, async (req, res) => {

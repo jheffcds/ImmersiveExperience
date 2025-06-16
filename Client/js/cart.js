@@ -5,17 +5,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+  // Handle logout button
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('cart');
+      window.location.href = 'index.html';
+    });
+  }
+
+  // Check login status
+  if (!token) {
+    alert('Please log in to access your cart.');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  // If cart is empty
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
     checkoutBtn.style.display = "none";
     return;
   }
-  fetch(`/api/scenes`)
+
+  // Fetch all scenes to get info about items in cart
+  fetch('/api/scenes')
     .then(res => res.json())
     .then(allScenes => {
       let total = 0;
       cartItemsContainer.innerHTML = '';
-      cartItemsContainer.classList.add('card-grid'); // Use same layout as explore
+      cartItemsContainer.classList.add('card-grid');
 
       cart.forEach(id => {
         const scene = allScenes.find(s => s._id === id);
@@ -44,7 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
           cartItemsContainer.appendChild(card);
         }
       });
+
       cartTotal.innerHTML = `<strong>Total: $${total.toFixed(2)}</strong>`;
+
+      // Remove item handler
       document.querySelectorAll('.remove-item').forEach(btn => {
         btn.addEventListener('click', () => {
           const idToRemove = btn.getAttribute('data-id');
@@ -53,6 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
           location.reload();
         });
       });
+
+      // Checkout handler
       checkoutBtn.addEventListener('click', () => {
         fetch('/api/checkout', {
           method: 'POST',
@@ -65,7 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(res => res.json())
           .then(data => {
             if (data.url) {
-              window.location.href = data.url; // Redirect to Stripe Checkout
+              // Redirect to Stripe checkout
+              window.location.href = data.url;
             } else {
               throw new Error('Checkout URL missing');
             }
@@ -75,5 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Checkout failed. Please try again.');
           });
       });
+    })
+    .catch(err => {
+      console.error('Failed to load scenes:', err);
+      alert('Could not load cart items.');
     });
 });

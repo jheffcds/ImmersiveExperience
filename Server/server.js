@@ -5,6 +5,10 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
+
 app.use(cors());
 app.use(express.json());
 
@@ -21,6 +25,19 @@ const checkoutRoutes = require('./routes/checkout');
 const webhookRoutes = require('./routes/webhook'); // ✅ FIXED
 
 // API route mounting
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'keyboard_cat', // change this in .env
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  }
+}));
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
 app.use('/api/scenes', sceneRoutes);

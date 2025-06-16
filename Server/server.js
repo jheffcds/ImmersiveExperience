@@ -26,7 +26,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin/scenes', adminSceneRoutes);
 app.use('/api/favourites', favouriteRoutes);
-app.use('/api/checkout', checkoutRoutes); // Standard routes
+app.use('/api', checkoutRoutes);
 app.use('/api/webhook', webhookRoutes);
 
 // Serve static scene images

@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const webhookRoutes = require('./routes/webhook');
 app.use(cors());
+app.use(express.json());
 const protectedRoutes = require('./routes/protected');
 const authRoutes = require('./routes/auth');
 const sceneRoutes = require('./routes/scenes');
@@ -27,7 +28,6 @@ app.use('/api/admin/scenes', adminSceneRoutes);
 app.use('/api/favourites', favouriteRoutes);
 app.use('/api/checkout', checkoutRoutes); // Standard routes
 app.use('/api/webhook', webhookRoutes);
-app.use(express.json());
 
 // Serve static scene images
 try {

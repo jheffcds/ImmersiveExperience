@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
               localStorage.removeItem('cart');
               window.location.href = data.url; // Redirect to Stripe Checkout
             } else {
-              throw new Error('Checkout URL missing');
+              throw new Error('Checkout URL missing, test your server logs');
             }
           })
           .catch(err => {

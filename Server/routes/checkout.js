@@ -6,6 +6,7 @@ const Scene = require('../models/Scene');
 const authMiddleware = require('../middleware/authenticateToken'); // Protect route if needed
 
 router.post('/checkout', authMiddleware, async (req, res) => {
+  console.log('Checkout request received:', req.body);
   const { sceneIds } = req.body;
   if (!sceneIds || !Array.isArray(sceneIds) || sceneIds.length === 0) {
     return res.status(400).json({ error: 'No scenes to checkout' });

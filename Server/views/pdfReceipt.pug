@@ -1,0 +1,54 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    style.
+      body {
+        font-family: 'Helvetica Neue', sans-serif;
+        padding: 40px;
+        color: #333;
+      }
+      .logo {
+        max-width: 100px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: 26px;
+        margin-bottom: 10px;
+      }
+      .details {
+        margin-bottom: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th, td {
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      .total {
+        font-size: 18px;
+        text-align: right;
+        margin-top: 20px;
+      }
+  body
+    img.logo(src="file:///var/www/ImmersiveExperience/Client/assets/images/logo.png", alt="VR Verity")
+    h1 Purchase Receipt
+    .details
+      p Date: #{date}
+      p Customer: #{name}
+    table
+      thead
+        tr
+          th Scene Title
+          th Price
+      tbody
+        each scene in scenes
+          tr
+            td #{scene.title}
+            td $#{scene.price.toFixed(2)}
+    p.total Total Paid: $#{total.toFixed(2)}
+    p(style="text-align:center; padding-top: 20px;") This receipt is for your records. If you have any questions, please contact us at support@vr-verity.com

@@ -62,8 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
           },
           body: JSON.stringify({ sceneIds: cart })
         })
+        console.log('Checkout request sent with cart:', cart)
           .then(res => res.json())
+          console.log('Checkout response:', res)
           .then(data => {
+            console.log('Checkout data:', data);
             if (data.url) {
               // Clear cart before redirect to prevent duplicates if they come back
               localStorage.removeItem('cart');

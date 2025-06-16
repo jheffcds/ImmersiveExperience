@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   address: { type: String, default: '' }, 
   role: { type: String, default: 'user' },
   favourites: { type: [mongoose.Schema.Types.ObjectId], ref: 'Scene', default: [] },
-  purchasedScenes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scene', default: [] }]
+  purchasedScenes: { type: [mongoose.Schema.Types.ObjectId], ref: 'Scene', default: [] }
 }
 , { timestamps: true }); // timestamps for createdAt and updatedAt
 // Password hashing middleware

@@ -65,8 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(res => res.json())
           .then(data => {
             if (data.url) {
-              // Clear cart before redirect to prevent duplicates if they come back
-              localStorage.removeItem('cart');
               window.location.href = data.url; // Redirect to Stripe Checkout
             } else {
               throw new Error('Checkout URL missing');

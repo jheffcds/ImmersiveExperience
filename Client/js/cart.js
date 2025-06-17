@@ -94,8 +94,4 @@ document.addEventListener('DOMContentLoaded', () => {
           });
       });
     })
-    .catch(err => {
-      console.error('Failed to load scenes:', err);
-      alert('Could not load cart items.');
-    });
 });

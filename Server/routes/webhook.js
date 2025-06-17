@@ -38,7 +38,7 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req
         return res.status(404).send("User not found");
       }
 
-      const sceneObjectIds = sceneIds.map(id => new mongoose.Types.ObjectId(id));
+      const sceneObjectIds = sceneIds.map(id => new mongoose.Types.ObjectId(String(id)));
       // Add scenes to user's purchasedScenes if not already included
       sceneObjectIds.forEach(sceneId => {
         if (!user.purchasedScenes.some(existingId => existingId.equals(sceneId))) {

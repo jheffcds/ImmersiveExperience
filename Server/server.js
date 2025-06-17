@@ -22,11 +22,11 @@ const purchaseRoutes = require('./routes/purchase');
 const adminSceneRoutes = require('./routes/adminScenes');
 const favouriteRoutes = require('./routes/favourites');
 const checkoutRoutes = require('./routes/checkout');
-const webhookRoutes = require('./routes/webhook'); // ✅ FIXED
+const webhookRoutes = require('./routes/webhook');
 
 // API route mounting
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'keyboard_cat', // change this in .env
+  secret: process.env.SESSION_SECRET ,
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
@@ -47,7 +47,7 @@ app.use('/api/purchases', purchaseRoutes);
 app.use('/api/admin/scenes', adminSceneRoutes);
 app.use('/api/favourites', favouriteRoutes);
 app.use('/api', checkoutRoutes);
-app.use('/api/webhook', webhookRoutes); // ✅ FIXED POSITION & REFERENCE
+app.use('/api/webhook', webhookRoutes); 
 
 // Static assets
 try {
@@ -58,7 +58,7 @@ try {
 }
 
 try {
-  app.use('/uploads', express.static(path.join(__dirname, 'public/uploads'))); // ✅ Unified
+  app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
   console.log('✔ access to uploads folder granted');
 } catch (err) {
   console.error('access to upload folder denied:', err.message);

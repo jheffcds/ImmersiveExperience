@@ -38,7 +38,7 @@ router.post('/checkout', authMiddleware, async (req, res) => {
       line_items: lineItems,
       mode: 'payment',
       success_url: 'https://www.vr-verity.com/success.html',
-      cancel_url: 'https://www.vr-verity.com/cart.html',
+      cancel_url: 'https://www.vr-verity.com/cart.html?fromCheckout=true',
       metadata: {
         userId: req.user.userId, // req.user is available from auth middleware
         sceneIds: JSON.stringify(sceneIds), // Pass purchased scenes

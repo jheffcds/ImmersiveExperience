@@ -14,14 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'index.html';
     });
   }
-
-  // Check login status
-  if (!token) {
-    alert('Please log in to access your cart.');
-    window.location.href = 'login.html';
-    return;
-  }
-
   // If cart is empty
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";

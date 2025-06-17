@@ -18,6 +18,7 @@ router.post('/checkout', authMiddleware, async (req, res) => {
   }
   try {
     const scenes = await Scene.find({ _id: { $in: sceneIds } });
+    console.log(`Found ${scenes.length} scenes for checkout:`, scenes.map(s => s.title).join(', '));
     const lineItems = scenes.map(scene => ({
       price_data: {
         currency: 'usd',
@@ -29,6 +30,9 @@ router.post('/checkout', authMiddleware, async (req, res) => {
       },
       quantity: 1,
     }));
+    console.log('Line items for Stripe:', lineItems);
+    console.log('User ID for checkout:', req.user.userId);
+    console.log('Scene IDs for checkout:', sceneIds);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
@@ -40,6 +44,10 @@ router.post('/checkout', authMiddleware, async (req, res) => {
         sceneIds: JSON.stringify(sceneIds), // Pass purchased scenes
       },
     });
+    console.log('Stripe session created:', session.id);
+    console.log('Stripe session URL:', session.url);
+    console.log('Stripe session metadata:', session.metadata);
+    console.log('Stripe session line items:', session.line_items);
     res.json({ url: session.url });
   } catch (err) {
     console.error('Stripe checkout error:', err);

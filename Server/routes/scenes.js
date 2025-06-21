@@ -18,6 +18,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// =================== GET: Featured scenes (public) ===================
+router.get('/featured', async (req, res) => {
+  try {
+    const featuredScenes = await Scene.find({ featured: true });
+    res.json(featuredScenes);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching featured scenes', error: err.message });
+  }
+});
+
 // =================== GET: Single scene by ID (public) ===================
 router.get('/:id', async (req, res) => {
   try {

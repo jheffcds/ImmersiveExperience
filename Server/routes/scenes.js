@@ -84,10 +84,17 @@ router.post('/', authenticateToken, adminAuth, (req, res) => {
 // =================== GET: Favourite scenes (public) ===================
 router.get('/favourites', authenticateToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).populate('favourites');
-    res.status(200).json(user.favourites);
+    const user = await User.findById(req.user.userId)
+      .populate('favourites') // 👈 This fetches full scene documents
+      .select('favourites');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ favourites: user.favourites });
   } catch (err) {
-    console.error(err);
+    console.error('Error fetching favourites:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

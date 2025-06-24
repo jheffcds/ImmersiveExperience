@@ -180,7 +180,7 @@ a {
     rgba(255, 255, 255, 0.1) 100%
   );
   transform: skewX(-20deg);
-  animation: shine 2.5s infinite;
+  animation: shine 7.5s infinite;
   z-index: 2;
   pointer-events: none;
 }
@@ -189,10 +189,14 @@ a {
   0% {
     left: -75%;
   }
-  100% {
+  33.33% {
     left: 125%;
   }
+  100% {
+    left: 125%; /* hold position for remaining time */
+  }
 }
+
 .btn-secondary {
   bottom: 20px;
   left: 45%;

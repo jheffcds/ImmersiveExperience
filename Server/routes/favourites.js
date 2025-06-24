@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 const User = require('../models/User');
-// ✅ GET route to fetch user's favourites
+
+// ✅ GET route to fetch user's favourites (populated with full scene data)
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('favourites');
+    const user = await User.findById(req.user.userId)
+      .populate('favourites') // 👈 This fetches full scene documents
+      .select('favourites');
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -17,7 +21,7 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-// ✅ POST route to toggle favourite
+// ✅ POST route to toggle favourite (no change needed)
 router.post('/', authenticateToken, async (req, res) => {
   const { sceneId } = req.body;
 

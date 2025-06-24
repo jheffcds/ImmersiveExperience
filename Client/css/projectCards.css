@@ -114,7 +114,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: transform 0.9s ease, box-shadow 0.9s ease;
+  transition: transform 3s ease, box-shadow 3s ease;
   position: relative;
 }
 

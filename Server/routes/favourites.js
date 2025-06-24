@@ -50,5 +50,22 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+// =================== GET: Favourite scenes (IDs only) ===================
+router.get('/favourites', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('favourites');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Return only array of IDs
+    res.status(200).json({ favourites: user.favourites.map(id => id.toString()) });
+  } catch (err) {
+    console.error('Error fetching favourites:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

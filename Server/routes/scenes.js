@@ -81,5 +81,16 @@ router.post('/', authenticateToken, adminAuth, (req, res) => {
     }
   });
 });
+// =================== GET: Favourite scenes (public) ===================
+router.get('/favourites', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).populate('favourites');
+    res.status(200).json(user.favourites);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

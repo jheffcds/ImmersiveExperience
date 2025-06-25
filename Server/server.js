@@ -65,6 +65,14 @@ try {
 }
 
 try {
+  app.use('/bundles', express.static(path.join(__dirname, 'bundles')));
+  console.log('✔ access to bundles folder granted');
+} catch (err) {
+  console.error('access to bundles folder denied:', err.message);
+}
+
+
+try {
   app.use(express.static(path.join(__dirname, '../Client')));
   console.log('✔ Static client files registered');
 } catch (err) {

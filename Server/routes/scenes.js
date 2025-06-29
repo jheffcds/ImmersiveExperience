@@ -68,6 +68,7 @@ router.post('/', authenticateToken, adminAuth, (req, res) => {
         description: req.body.description,
         story: req.body.story,
         link: req.body.link,
+        bundleName: req.body.bundleName,
         price,
         isAvailable,
         featured,

@@ -65,7 +65,7 @@ try {
 }
 
 try {
-  app.use('/bundles', express.static(path.join(__dirname, 'bundles')));
+  app.use('/aa', express.static(path.join(__dirname, 'aa')));
   console.log('✔ access to bundles folder granted');
 } catch (err) {
   console.error('access to bundles folder denied:', err.message);

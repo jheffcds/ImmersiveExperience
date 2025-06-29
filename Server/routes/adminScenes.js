@@ -148,6 +148,7 @@ router.put('/:id', authenticateToken, adminAuth, async (req, res) => {
       scene.description = req.body.description || scene.description;
       scene.story = req.body.story || scene.story;
       scene.link = req.body.link || scene.link;
+      scene.bundleName = req.body.bundleName || scene.bundleName;
       scene.price = price;
       scene.isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
       scene.featured = req.body.featured === 'true' || req.body.featured === true;

@@ -28,6 +28,7 @@ function showSection(section) {
           <textarea id="story" placeholder="Story"></textarea>
           <textarea id="description" placeholder="Description"></textarea>
           <input type="text" id="link" placeholder="Scene URL" />
+          <input type="text" id="bundleName" placeholder="Bundle Name" />
           <input type="number" id="price" placeholder="Price" step="0.01" min="0" />
 
           <div class="checkbox-group">
@@ -88,6 +89,7 @@ function submitScene(e) {
   formData.append('description', document.getElementById('description').value);
   formData.append('story', document.getElementById('story').value);
   formData.append('link', document.getElementById('link').value);
+  formData.append('bundleName', document.getElementById('bundleName').value);
   formData.append('price', document.getElementById('price').value);
   formData.append('isAvailable', document.getElementById('isAvailable').checked);
   formData.append('featured', document.getElementById('featured').checked);
@@ -219,6 +221,7 @@ function editScene(id) {
       document.getElementById('editDescription').value = scene.description || '';
       document.getElementById('editStory').value = scene.story || '';
       document.getElementById('editLink').value = scene.link || '';
+      document.getElementById('editBundleName').value = scene.bundleName || '';
       document.getElementById('editPrice').value = scene.price || '';
       document.getElementById('editAvailable').checked = scene.isAvailable || false;
       document.getElementById('editFeatured').checked = scene.featured || false;
@@ -297,6 +300,7 @@ function submitEditScene(e) {
   formData.append('description', document.getElementById('editDescription').value);
   formData.append('story', document.getElementById('editStory').value);
   formData.append('link', document.getElementById('editLink').value);
+  formData.append('bundleName', document.getElementById('editBundleName').value);
   formData.append('price', document.getElementById('editPrice').value);
   formData.append('isAvailable', document.getElementById('editAvailable').checked);
   formData.append('featured', document.getElementById('editFeatured').checked);

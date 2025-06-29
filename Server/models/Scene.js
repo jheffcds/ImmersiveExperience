@@ -9,6 +9,7 @@ const sceneSchema = new mongoose.Schema({
   isAvailable: { type: Boolean, default: true },
   images: [String],
   link: String,
+  bundleName: String, 
   featured: { type: Boolean, default: false }
 });
 
